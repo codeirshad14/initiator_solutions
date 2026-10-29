@@ -33,6 +33,22 @@
   <link href="{% static 'web2\assets\vendor\bootstrap\css\bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'web2\assets\vendor\bootstrap-icons\bootstrap-icons.css' %}" rel="stylesheet">
   <link href="{% static 'web2\assets\vendor\aos\aos.css'%}" rel="stylesheet">
+  <style>
+    /* Fail-safe: if aos.js is slow to arrive, show the content instead of keeping it hidden. */
+    .aos-fallback [data-aos] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+  <script>
+    // AOS marks <body data-aos-easing> when it starts; if it has not started
+    // 1.5 s after the page began loading, stop waiting for it.
+    setTimeout(function() {
+      if (!document.body || !document.body.hasAttribute('data-aos-easing')) {
+        document.documentElement.classList.add('aos-fallback');
+      }
+    }, 1500);
+  </script>
 
   <!-- Template Main CSS File -->
   <link href="{% static 'web2\assets\css\style.css' %}?v=20260720-media-footer" rel="stylesheet">
