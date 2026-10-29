@@ -29,13 +29,10 @@
   <!-- Google Fonts (display=swap: text shows at once instead of staying invisible until the fonts arrive) -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap" rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
+  <!-- Vendor CSS Files (Remix Icon, Swiper and GLightbox were removed: no page uses them) -->
   <link href="{% static 'web2\assets\vendor\bootstrap\css\bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'web2\assets\vendor\bootstrap-icons\bootstrap-icons.css' %}" rel="stylesheet">
   <link href="{% static 'web2\assets\vendor\aos\aos.css'%}" rel="stylesheet">
-  <link href="{% static 'web2\assets\vendor\remixicon\remixicon.css' %}" rel="stylesheet">
-  <link href="{% static 'web2\assets\vendor\swiper\swiper-bundle.min.css' %}" rel="stylesheet">
-  <link href="{% static 'web2\assets\vendor\glightbox\css\glightbox.min.css' %}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link href="{% static 'web2\assets\css\style.css' %}?v=20260720-media-footer" rel="stylesheet">
@@ -765,7 +762,7 @@
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <a href="{% url 'index' %}" class="logo d-flex align-items-center" title="Initiator Solutions">
-        <img src="{% static 'web2\assets\img\logo\NW\InitiatorLogo.png' %}" class="site-logo-mark" alt="Initiator Solutions" title="Initiator Solutions Logo">
+        <img src="{% static 'web2\assets\img\logo\NW\InitiatorLogo-168.png' %}" class="site-logo-mark" alt="Initiator Solutions" title="Initiator Solutions Logo">
       </a>
 
       <nav id="navbar" class="navbar">
@@ -912,7 +909,7 @@
           <div class="col-xl-3 col-md-6 footer-card-col">
             <div class="footer-info">
               <a href="{% url 'index' %}" title="Home" class="logo d-flex align-items-center pt-2">
-                <img src="{% static 'web2\assets\img\logo\NW\InitiatorLogo.png' %}" class="footer-logo-mark" alt="Initiator Solutions" title="Initiator Solutions Logo">
+                <img src="{% static 'web2\assets\img\logo\NW\InitiatorLogo-168.png' %}" class="footer-logo-mark" loading="lazy" decoding="async" alt="Initiator Solutions" title="Initiator Solutions Logo">
                 <span class="text-wrap">INITIATOR SOLUTIONS</span>
               </a>
               <p class="pt-2">Initiator Solutions builds business software, Tally customization, cloud, ERP, websites and accounting software solutions for growing companies.</p>
@@ -1001,20 +998,25 @@
   </div>
   {% endwith %}
 
-  <!-- Vendor JS Files -->
-  <script src="{% static 'web2\assets\vendor\bootstrap\js\bootstrap.bundle.min.js' %}"></script>
+  <!-- Vendor JS Files. The modal and other Bootstrap widgets use the Bootstrap 4
+       bundle below (data-toggle); the unused Bootstrap 5 JS, Swiper, Isotope,
+       GLightbox and php-email-form scripts were removed. -->
   <script src="{% static 'web2\assets\vendor\aos\aos.js' %}"></script>
-  <script src="{% static 'web2\assets\vendor\php-email-form\validate.js' %}"></script>
-  <script src="{% static 'web2\assets\vendor\swiper\swiper-bundle.min.js' %}"></script>
-  <script src="{% static 'web2\assets\vendor\purecounter\purecounter.js'%}"></script>
-  <script src="{% static 'web2\assets\vendor\isotope-layout\isotope.pkgd.min.js' %}"></script>
-  <script src="{% static 'web2\assets\vendor\glightbox\js\glightbox.min.js' %}"></script>
+  <script>
+    // Start the scroll animations as soon as the page HTML is in, without
+    // waiting for the deferred scripts below (CDN downloads can be slow).
+    if (window.AOS) {
+      AOS.init({ duration: 1000, easing: 'ease-in-out', once: true, mirror: false, startEvent: 'aos:start' });
+      document.dispatchEvent(new Event('aos:start'));
+    }
+  </script>
+  <script defer src="{% static 'web2\assets\vendor\purecounter\purecounter.js'%}"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
   <!-- Template Main JS File -->
-  <script src="{% static 'web2\assets\js\main.js' %}?v=20261029-fast-load"></script>
+  <script defer src="{% static 'web2\assets\js\main.js' %}?v=20261029-fast-load-2"></script>
 
 </body>
 

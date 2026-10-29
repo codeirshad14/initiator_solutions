@@ -175,138 +175,11 @@
   });
 
   /**
-   * Clients Slider
-   */
-  new Swiper('.clients-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    },
-    breakpoints: {
-      320: {
-        slidesPerView: 2,
-        spaceBetween: 40
-      },
-      480: {
-        slidesPerView: 3,
-        spaceBetween: 60
-      },
-      640: {
-        slidesPerView: 4,
-        spaceBetween: 80
-      },
-      992: {
-        slidesPerView: 6,
-        spaceBetween: 120
-      }
-    }
-  });
-
-  /**
-   * Porfolio isotope and filter
+   * Animation on scroll: started inline in wbase.html right after aos.js, so
+   * content never waits for this file. Positions are re-measured once images load.
    */
   window.addEventListener('load', () => {
-    let portfolioContainer = select('.portfolio-container');
-    if (portfolioContainer) {
-      let portfolioIsotope = new Isotope(portfolioContainer, {
-        itemSelector: '.portfolio-item',
-        layoutMode: 'fitRows'
-      });
-
-      let portfolioFilters = select('#portfolio-flters li', true);
-
-      on('click', '#portfolio-flters li', function(e) {
-        e.preventDefault();
-        portfolioFilters.forEach(function(el) {
-          el.classList.remove('filter-active');
-        });
-        this.classList.add('filter-active');
-
-        portfolioIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
-        aos_init();
-      }, true);
-    }
-
-  });
-
-  /**
-   * Initiate portfolio lightbox 
-   */
-  const portfolioLightbox = GLightbox({
-    selector: '.portfokio-lightbox'
-  });
-
-  /**
-   * Portfolio details slider
-   */
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
-
-  /**
-   * Testimonials slider
-   */
-  new Swiper('.testimonials-slider', {
-    speed: 600,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    },
-    breakpoints: {
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 40
-      },
-
-      1200: {
-        slidesPerView: 3,
-      }
-    }
-  });
-
-  /**
-   * Animation on scroll
-   */
-  function aos_init() {
-    AOS.init({
-      duration: 1000,
-      easing: "ease-in-out",
-      once: true,
-      mirror: false
-    });
-  }
-  // Start when the HTML is ready, not on window "load": waiting for every image,
-  // the map and the fonts kept the hero (and all data-aos content) invisible.
-  // Positions are re-measured once images have loaded.
-  aos_init();
-  window.addEventListener('load', () => {
-    AOS.refresh();
+    if (window.AOS) AOS.refresh();
   });
 
   /**
@@ -339,58 +212,6 @@
   }, true)
 
   /**
-   * Typing animation for headings marked data-typing (home hero), left to right.
-   * The full text stays in the HTML for search engines and no-JS visitors. Letters
-   * not typed yet stay in place but invisible, so the heading always has its final
-   * size and the page never jumps. Reduced-motion visitors see the full text.
-   */
-  const typeHeading = (heading) => {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-    const originalHtml = heading.innerHTML
-    const parts = []
-    const splitTextNodes = (parent) => {
-      [...parent.childNodes].forEach((child) => {
-        if (child.nodeType === Node.ELEMENT_NODE) {
-          splitTextNodes(child)
-        } else if (child.nodeType === Node.TEXT_NODE && child.textContent) {
-          const typed = document.createTextNode('')
-          const rest = document.createElement('span')
-          rest.className = 'typing-rest'
-          rest.textContent = child.textContent
-          child.replaceWith(typed, rest)
-          parts.push({ typed, rest, text: rest.textContent })
-        }
-      })
-    }
-    heading.setAttribute('aria-label', heading.textContent.trim())
-    splitTextNodes(heading)
-    const caret = document.createElement('span')
-    caret.className = 'typing-caret'
-    caret.setAttribute('aria-hidden', 'true')
-
-    let partIndex = 0
-    let charCount = 0
-    const typeNext = () => {
-      if (partIndex >= parts.length) {
-        heading.innerHTML = originalHtml
-        heading.removeAttribute('aria-label')
-        return
-      }
-      const { typed, rest, text } = parts[partIndex]
-      charCount += 1
-      typed.textContent = text.slice(0, charCount)
-      rest.textContent = text.slice(charCount)
-      rest.before(caret)
-      if (charCount >= text.length) {
-        partIndex += 1
-        charCount = 0
-      }
-      setTimeout(typeNext, 55)
-    }
-    setTimeout(typeNext, 300)
-  }
-  /**
    * Swipeable group filters on phones: scroll the selected group into view.
    */
   window.addEventListener('load', () => {
@@ -401,15 +222,6 @@
       }
     })
   })
-
-  // Start once the fonts are ready (not after every image on the page), so the
-  // typing runs during the AOS fade-in.
-  const startTyping = () => select('[data-typing]', true).forEach(typeHeading)
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(startTyping)
-  } else {
-    window.addEventListener('load', startTyping)
-  }
 
   /**
    * Analytics: send enquiries, phone, WhatsApp and email clicks as GA4 lead

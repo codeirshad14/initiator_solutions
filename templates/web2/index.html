@@ -73,6 +73,58 @@
     }
   }
 
+  /* Hero entrance: the same fade-up / zoom-out as AOS (1s ease-in-out), but in
+     CSS so the hero shows as soon as the page is painted instead of waiting for
+     every script to download. */
+  @keyframes hero-fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 100px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translateZ(0);
+    }
+  }
+
+  @keyframes hero-zoom-out {
+    from {
+      opacity: 0;
+      transform: scale(1.2);
+    }
+    to {
+      opacity: 1;
+      transform: translateZ(0) scale(1);
+    }
+  }
+
+  .hero-fade-up {
+    animation: hero-fade-up 1s ease-in-out both;
+  }
+
+  .hero-zoom-out {
+    animation: hero-zoom-out 1s ease-in-out both;
+  }
+
+  .hero-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .hero-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .hero-delay-600 {
+    animation-delay: 0.6s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fade-up,
+    .hero-zoom-out {
+      animation: none;
+    }
+  }
+
   .landing-hero h2 {
     max-width: 620px;
     margin-top: 18px;
@@ -719,14 +771,14 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
-          <div class="landing-hero-badge" data-aos="fade-up">
+        <div class="col-lg-6 d-flex flex-column justify-content-center hero-fade-up hero-delay-200">
+          <div class="landing-hero-badge hero-fade-up">
             <i class="bi bi-stars"></i>
             <span>Fully Automation</span>
           </div>
-          <h1 data-aos="fade-up" data-aos-delay="200" data-typing>Let's Initiate Your Business With <span class="hero-title-accent">Initiator Solutions</span></h1>
-          <h2 data-aos="fade-up" data-aos-delay="400">Noida-based software company for TallyPrime customization, Tally integration, Tally on Cloud, Tally AI, Tally training, Zoho Books and web application development.</h2>
-          <div data-aos="fade-up" data-aos-delay="600">
+          <h1 class="hero-fade-up hero-delay-200" data-typing>Let's Initiate Your Business With <span class="hero-title-accent">Initiator Solutions</span></h1>
+          <h2 class="hero-fade-up hero-delay-400">Noida-based software company for TallyPrime customization, Tally integration, Tally on Cloud, Tally AI, Tally training, Zoho Books and web application development.</h2>
+          <div class="hero-fade-up hero-delay-600">
             <div class="landing-hero-actions text-center text-lg-start">
               <a href="{% url 'web_dev' %}" class="landing-btn-primary d-inline-flex align-items-center justify-content-center" title="Services">
                 <span>Explore Services</span>
@@ -744,7 +796,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">
+        <div class="col-lg-6 hero-img hero-zoom-out hero-delay-200">
           {% if i.img %}
             <img src="{{ i.img|image_url:1200 }}" class="img-fluid" alt="{{ i.imagalt|default:'Initiator Solutions banner' }}" title="{{ i.imagalt|default:'Initiator Solutions banner' }}" fetchpriority="high">
           {% else %}
@@ -756,6 +808,60 @@
 	{% endfor %}
 
   </section><!-- End Hero -->
+  <script>
+    /* Typing animation for the hero heading, left to right. Inline so it starts
+       with the CSS fade-in instead of waiting for the script files. The full text
+       stays in the HTML for search engines and no-JS visitors. Letters not typed
+       yet stay in place but invisible, so the heading always has its final size
+       and the page never jumps. Reduced-motion visitors see the full text. */
+    (function() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+      document.querySelectorAll('[data-typing]').forEach(function(heading) {
+        var originalHtml = heading.innerHTML
+        var parts = []
+        var splitTextNodes = function(parent) {
+          Array.prototype.slice.call(parent.childNodes).forEach(function(child) {
+            if (child.nodeType === Node.ELEMENT_NODE) {
+              splitTextNodes(child)
+            } else if (child.nodeType === Node.TEXT_NODE && child.textContent) {
+              var typed = document.createTextNode('')
+              var rest = document.createElement('span')
+              rest.className = 'typing-rest'
+              rest.textContent = child.textContent
+              child.replaceWith(typed, rest)
+              parts.push({ typed: typed, rest: rest, text: rest.textContent })
+            }
+          })
+        }
+        heading.setAttribute('aria-label', heading.textContent.trim())
+        splitTextNodes(heading)
+        var caret = document.createElement('span')
+        caret.className = 'typing-caret'
+        caret.setAttribute('aria-hidden', 'true')
+
+        var partIndex = 0
+        var charCount = 0
+        var typeNext = function() {
+          if (partIndex >= parts.length) {
+            heading.innerHTML = originalHtml
+            heading.removeAttribute('aria-label')
+            return
+          }
+          var part = parts[partIndex]
+          charCount += 1
+          part.typed.textContent = part.text.slice(0, charCount)
+          part.rest.textContent = part.text.slice(charCount)
+          part.rest.before(caret)
+          if (charCount >= part.text.length) {
+            partIndex += 1
+            charCount = 0
+          }
+          setTimeout(typeNext, 55)
+        }
+        setTimeout(typeNext, 300)
+      })
+    })()
+  </script>
   <!-- =======  Banner END ======= -->
 
   <!-- ======= About us Start ======= -->
@@ -1016,7 +1122,7 @@
 		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
 		  <div class="member">
 			<div class="member-img">
-			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <img src="{% static 'web2\assets\img\perosn-800.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
 			  <div class="social">
 				
 			  </div>
@@ -1032,7 +1138,7 @@
 		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
 		  <div class="member">
 			<div class="member-img">
-			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <img src="{% static 'web2\assets\img\perosn-800.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
 			  <div class="social">
 				
 			  </div>
@@ -1047,7 +1153,7 @@
 		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
 		  <div class="member">
 			<div class="member-img">
-			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <img src="{% static 'web2\assets\img\perosn-800.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
 			  <div class="social">
 			
 			  </div>
@@ -1063,7 +1169,7 @@
 		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
 		  <div class="member">
 			<div class="member-img">
-			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <img src="{% static 'web2\assets\img\perosn-800.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
 			  <div class="social">
 			
 			  </div>
