@@ -1,0 +1,3 @@
+# Generated WebP copies of uploaded images (python manage.py optimize_images)
+static/dynamic_images/_optimized/
+staticfiles/dynamic_images/_optimized/

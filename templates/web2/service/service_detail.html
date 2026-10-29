@@ -5,7 +5,7 @@
 <meta content="{{ seo_keywords }}" name="keywords">
 {% endblock %}
 
-{% load static seo_tags %}
+{% load static seo_tags image_tags %}
 
 {% block css %}
 <style>
@@ -287,7 +287,7 @@
             <div class="col-lg-5 mb-4 mb-lg-0">
               <div class="service-detail-media">
                 {% if service.img %}
-                  <img src="{{ service.img.url }}" class="img-fluid" alt="{{ service.image_alt|default:service.display_title }}" title="{{ service.image_alt|default:service.display_title }}">
+                  <img src="{{ service.img|image_url:1200 }}" class="img-fluid" alt="{{ service.image_alt|default:service.display_title }}" title="{{ service.image_alt|default:service.display_title }}">
                 {% else %}
                   {% include "web2/partials/no_image.html" with placeholder_class="no-image-detail" placeholder_label=service.display_title %}
                 {% endif %}

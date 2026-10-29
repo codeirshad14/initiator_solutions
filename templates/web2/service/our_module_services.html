@@ -5,7 +5,7 @@
 <meta content="{{ seo_keywords }}" name="keywords">
 {% endblock %}
 
-{% load static %}
+{% load static image_tags %}
 
 {% block css %}
 <style>
@@ -253,7 +253,7 @@
         <div class="box border module-card" data-aos="fade-up" data-aos-delay="200">
           <a href="{{ item.detail_url }}?from=modules" class="module-media" title="{{ service.display_title }}">
             {% if service.img %}
-              <img src="{{ service.img.url }}" class="img-fluid" alt="{{ service.image_alt|default:service.display_title }}" title="{{ service.image_alt|default:service.display_title }}"{% if forloop.counter > 3 %} loading="lazy" decoding="async"{% endif %}>
+              <img src="{{ service.img|image_url:800 }}" class="img-fluid" alt="{{ service.image_alt|default:service.display_title }}" title="{{ service.image_alt|default:service.display_title }}"{% if forloop.counter > 3 %} loading="lazy" decoding="async"{% endif %}>
             {% else %}
               {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=service.display_title %}
             {% endif %}

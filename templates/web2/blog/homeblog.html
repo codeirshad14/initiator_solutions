@@ -5,7 +5,7 @@
 <meta content="{{ seo_keywords }}" name="keywords">
 {% endblock %}
 
-{% load static %}
+{% load static image_tags %}
 
 {% block css %}
 {% include "web2/blog/_blog_styles.html" %}
@@ -67,7 +67,7 @@
           <div class="col-lg-6">
             <div class="blog-featured-media">
               {% if featured_blog.image %}
-              <img src="{{ featured_blog.image.url }}" alt="{{ featured_blog.alt|default:featured_blog.title }}" title="{{ featured_blog.alt|default:featured_blog.title }}">
+              <img src="{{ featured_blog.image|image_url:1200 }}" alt="{{ featured_blog.alt|default:featured_blog.title }}" title="{{ featured_blog.alt|default:featured_blog.title }}">
               {% else %}
               {% include "web2/partials/no_image.html" with placeholder_class="no-image-hero" placeholder_label=featured_blog.title %}
               {% endif %}
@@ -103,7 +103,7 @@
               <article class="blog-post-card">
                 <div class="blog-post-media">
                   {% if bl.image %}
-                  <img src="{{ bl.image.url }}" alt="{{ bl.alt|default:bl.title }}" title="{{ bl.alt|default:bl.title }}" loading="lazy" decoding="async">
+                  <img src="{{ bl.image|image_url:800 }}" alt="{{ bl.alt|default:bl.title }}" title="{{ bl.alt|default:bl.title }}" loading="lazy" decoding="async">
                   {% else %}
                   {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=bl.title %}
                   {% endif %}

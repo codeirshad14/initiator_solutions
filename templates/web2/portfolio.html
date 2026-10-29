@@ -4,7 +4,7 @@
 <meta content="{{ seo_description }}" name="description">
 <meta content="{{ seo_keywords }}" name="keywords">
 {% endblock %}
-{% load static %}
+{% load static image_tags %}
 
 {% block css %}
 <style>
@@ -662,7 +662,7 @@
         </div>
         <div class="col-lg-6 portfolio-hero-image" data-aos="zoom-out" data-aos-delay="200">
           {% if landing_banner and landing_banner.img %}
-          <img src="{{ landing_banner.img.url }}" class="img-fluid" alt="{{ landing_banner.imagalt|default:'Initiator Solutions portfolio banner' }}" title="{{ landing_banner.imagalt|default:'Initiator Solutions portfolio banner' }}">
+          <img src="{{ landing_banner.img|image_url:1200 }}" class="img-fluid" alt="{{ landing_banner.imagalt|default:'Initiator Solutions portfolio banner' }}" title="{{ landing_banner.imagalt|default:'Initiator Solutions portfolio banner' }}">
           {% else %}
           {% include "web2/partials/no_image.html" with placeholder_class="no-image-hero" placeholder_label="No portfolio banner image available" %}
           {% endif %}
@@ -697,7 +697,7 @@
           <div class="col-lg-6">
             <div class="portfolio-featured-media">
               {% if item.project.img %}
-              <img src="{{ item.project.img.url }}" alt="{{ item.project.name }}" title="{{ item.project.name }}">
+              <img src="{{ item.project.img|image_url:1200 }}" alt="{{ item.project.name }}" title="{{ item.project.name }}">
               {% else %}
               {% include "web2/partials/no_image.html" with placeholder_class="no-image-detail" placeholder_label=item.project.name %}
               {% endif %}
@@ -737,7 +737,7 @@
           <article class="portfolio-work-card" data-aos="fade-up" data-aos-delay="120">
             <div class="portfolio-work-image">
               {% if item.project.img %}
-              <img src="{{ item.project.img.url }}" alt="{{ item.project.name }}" title="{{ item.project.name }}" loading="lazy" decoding="async">
+              <img src="{{ item.project.img|image_url:800 }}" alt="{{ item.project.name }}" title="{{ item.project.name }}" loading="lazy" decoding="async">
               {% else %}
               {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=item.project.name %}
               {% endif %}

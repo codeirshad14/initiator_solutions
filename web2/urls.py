@@ -46,6 +46,9 @@ urlpatterns = [
     path('portfolio', views.portfolio, name='portfolio'),
     path('news_letter', views.news_letter, name='news_letter'),
 
+    # Small WebP copies of uploaded images
+    path('img/<int:width>/<path:name>', views.optimized_image, name='optimized_image'),
+
 
 
 ]

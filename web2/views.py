@@ -1,21 +1,26 @@
 import json
 import logging
+import os
 import re
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 from uuid import uuid4
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import SuspiciousFileOperation, ValidationError
+from django.core.files.storage import default_storage
 from django.core.mail import BadHeaderError, send_mail
 from django.core.validators import validate_email
 from django.db import OperationalError, ProgrammingError
 from django.db.models import Q
-from django.http import Http404, HttpResponse
+from django.http import FileResponse, Http404, HttpResponse, HttpResponseNotModified
 from django.shortcuts import get_object_or_404, render, redirect
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.http import http_date, parse_http_date_safe
+from django.views.decorators.cache import cache_control
 
+from web2 import images
 from web2.context_processors import schema_json as _schema_json
 from web2.models import Blog, ContactModel, \
     WebDevModel, AboutUSModel, AboutVisionModel, PortfolioModel, Web_DesignModel, \
@@ -921,6 +926,28 @@ def llms_txt(request):
 
 def favicon(request):
   return redirect(static('web2/assets/img/logo/NW/InitiatorLogo-favicon-96x96.png'), permanent=True)
+
+
+@cache_control(public=True, max_age=2592000)
+def optimized_image(request, width, name):
+  # Small WebP copy of an uploaded image (see web2/images.py).
+  if width not in images.WIDTHS or not images.is_optimizable(name):
+    raise Http404('No such image size')
+  try:
+    path = images.ensure_optimized(name, width)
+  except (FileNotFoundError, SuspiciousFileOperation):
+    raise Http404('No image')
+  except Exception:
+    logger.exception('Optimized image could not be created for %s (width %s)', name, width)
+    return redirect(default_storage.url(name))
+
+  modified = int(os.path.getmtime(path))
+  since = parse_http_date_safe(request.META.get('HTTP_IF_MODIFIED_SINCE', ''))
+  if since and modified <= since:
+    return HttpResponseNotModified()
+  response = FileResponse(open(path, 'rb'), content_type='image/webp')
+  response['Last-Modified'] = http_date(modified)
+  return response
 
 
 def indexnow_key_file(request, key):

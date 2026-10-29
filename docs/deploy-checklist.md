@@ -24,7 +24,13 @@ python manage.py migrate                      # 0044-0047: groups, SEO fields
 python manage.py apply_seo_content --dry-run  # review the list
 python manage.py apply_seo_content            # site SEO + 10 service pages
 python manage.py check_site_data              # renders every page; exit 1 = fix first
+python manage.py optimize_images              # small WebP copies of uploaded images
 ```
+
+`optimize_images` makes the resized WebP copies that pages now show instead of
+the multi-MB uploads (hero 2.3 MB -> 180 KB, product cards 7 MB -> 70 KB). It is
+optional: a missing copy is made by the first visitor who needs it. Copies are
+stored in `MEDIA_ROOT/_optimized/`; originals are never changed.
 
 `check_site_data` is read-only. It reports pages that would crash, image files
 missing on the server, invalid group slugs and counters that are not numbers.
@@ -56,6 +62,35 @@ Site SEO Settings, and fill founder name / founding year.
 python manage.py migrate web2 0043   # reverses 0044-0047 and restores old group values
 ```
 Then restore the previous code (or the `pg_dump` backup).
+
+## nginx: compression and browser caching (recommended)
+
+Inside the existing `server { listen 443 ... }` block for www:
+
+```nginx
+gzip on;
+gzip_types text/css application/javascript text/plain application/json image/svg+xml;
+
+location /static/ {
+    # keep your existing alias/root line
+    expires 30d;
+    add_header Cache-Control "public";
+}
+
+# Optional: nginx serves the WebP copies directly; Django makes missing ones.
+location ~ ^/web2/img/(\d+)/(.+)$ {
+    root <MEDIA_ROOT>/_optimized;        # e.g. /path/to/project/static/dynamic_images/_optimized
+    default_type image/webp;
+    try_files /$1/$2.webp @django;
+    expires 30d;
+    add_header Cache-Control "public";
+}
+```
+
+`@django` is the named location that proxies to gunicorn; if your config only
+has `location / { proxy_pass ... }`, add `location @django { proxy_pass ...; }`
+with the same proxy lines, or skip the optional block (Django serves the copies
+with a 30-day cache header either way).
 
 ## nginx: one main address
 

@@ -20,10 +20,14 @@
   <link href="{% static 'web2/assets/img/logo/NW/InitiatorLogo-favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
   <link href="{% static 'web2/assets/img/logo/NW/InitiatorLogo-favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
   <link href="{% static 'web2/assets/img/logo/NW/InitiatorLogo-favicon-180x180.png' %}" rel="apple-touch-icon" sizes="180x180">
+  <!-- Open the CDN connections early, while the HTML is still downloading -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <!-- Google Fonts (display=swap: text shows at once instead of staying invisible until the fonts arrive) -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'web2\assets\vendor\bootstrap\css\bootstrap.min.css' %}" rel="stylesheet">
@@ -998,7 +1002,7 @@
   {% endwith %}
 
   <!-- Vendor JS Files -->
-  <script src="{% static 'web2\assets\vendor\bootstrap\js\bootstrap.bundle.js' %}"></script>
+  <script src="{% static 'web2\assets\vendor\bootstrap\js\bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'web2\assets\vendor\aos\aos.js' %}"></script>
   <script src="{% static 'web2\assets\vendor\php-email-form\validate.js' %}"></script>
   <script src="{% static 'web2\assets\vendor\swiper\swiper-bundle.min.js' %}"></script>
@@ -1010,7 +1014,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
   <!-- Template Main JS File -->
-  <script src="{% static 'web2\assets\js\main.js' %}?v=20261029-ui-fixes"></script>
+  <script src="{% static 'web2\assets\js\main.js' %}?v=20261029-fast-load"></script>
 
 </body>
 

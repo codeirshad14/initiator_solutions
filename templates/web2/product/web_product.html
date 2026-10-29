@@ -235,7 +235,7 @@
 </style>
 {% endblock %}
 
-{% load static %}
+{% load static image_tags %}
 
 
 
@@ -273,7 +273,7 @@
           <div class="box border product-card product-card-{{ item.group_key }}" data-aos="fade-up" data-aos-delay="200">
             <a href="{{ item.detail_url }}" class="product-media" title="{{ pro.display_title }}">
               {% if pro.img %}
-                <img src="{{ pro.img.url }}" class="img-fluid" alt="{{ pro.display_title }}" title="{{ pro.display_title }}"{% if forloop.counter > 3 %} loading="lazy" decoding="async"{% endif %}>
+                <img src="{{ pro.img|image_url:800 }}" class="img-fluid" alt="{{ pro.display_title }}" title="{{ pro.display_title }}"{% if forloop.counter > 3 %} loading="lazy" decoding="async"{% endif %}>
               {% else %}
                 {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=pro.display_title %}
               {% endif %}

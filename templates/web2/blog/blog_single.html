@@ -5,7 +5,7 @@
 <meta content="{{ blog.seo_keywords }}" name="keywords">
 {% endblock %}
 
-{% load static seo_tags %}
+{% load static seo_tags image_tags %}
 
 {% block css %}
 {% include "web2/blog/_blog_styles.html" %}
@@ -40,7 +40,7 @@
         <div class="col-lg-5 mt-4 mt-lg-0">
           <div class="blog-article-media">
             {% if blog.image %}
-            <img src="{{ blog.image.url }}" alt="{{ blog.alt|default:blog.title }}" title="{{ blog.alt|default:blog.title }}">
+            <img src="{{ blog.image|image_url:1200 }}" alt="{{ blog.alt|default:blog.title }}" title="{{ blog.alt|default:blog.title }}">
             {% else %}
             {% include "web2/partials/no_image.html" with placeholder_class="no-image-detail" placeholder_label=blog.title %}
             {% endif %}

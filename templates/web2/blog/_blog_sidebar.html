@@ -1,4 +1,4 @@
-{% load static %}
+{% load static image_tags %}
 <aside class="blog-sidebar-panel">
   <div class="blog-sidebar-section">
     <h3 class="blog-sidebar-title">Search Blog</h3>
@@ -25,7 +25,7 @@
     {% for bl in recent_posts %}
     <div class="blog-recent-item">
       {% if bl.image %}
-      <img src="{{ bl.image.url }}" alt="{{ bl.alt|default:bl.title }}" title="{{ bl.alt|default:bl.title }}" loading="lazy" decoding="async">
+      <img src="{{ bl.image|image_url:400 }}" alt="{{ bl.alt|default:bl.title }}" title="{{ bl.alt|default:bl.title }}" loading="lazy" decoding="async">
       {% else %}
       {% include "web2/partials/no_image.html" with placeholder_class="no-image-recent" placeholder_label=bl.title %}
       {% endif %}

@@ -1,6 +1,8 @@
 import json
 import re
-from io import StringIO
+import shutil
+import tempfile
+from io import BytesIO, StringIO
 from pathlib import Path
 from smtplib import SMTPException
 from unittest import mock
@@ -718,3 +720,79 @@ class NewsLetterTests(TestCase):
         self.subscribe(f'{"a" * 60}@{"b" * 140}.com')
 
         self.assertEqual(OurNewsLetter.objects.count(), 0)
+
+
+class OptimizedImageTests(TestCase):
+    def setUp(self):
+        from PIL import Image
+
+        self.media_root = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.media_root, ignore_errors=True)
+        override = override_settings(MEDIA_ROOT=self.media_root)
+        override.enable()
+        self.addCleanup(override.disable)
+        self.name = 'web2/landingpage/hero.png'
+        Path(self.media_root, 'web2/landingpage').mkdir(parents=True)
+        Image.new('RGBA', (2400, 1600), (65, 84, 241, 128)).save(Path(self.media_root, self.name))
+        self.user = User.objects.create_user(username='img-user', password='pass')
+
+    def test_home_hero_and_cards_use_small_webp_copies(self):
+        Lan_PageBanModel.objects.create(user=self.user, img=self.name)
+        Product.objects.create(
+            user=self.user, product_group=group(CatalogGroup.TYPE_PRODUCT, Product.GROUP_TALLY),
+            name='Tally Prime', img=self.name, show_on_landing=True,
+        )
+
+        body = self.client.get(reverse('index')).content.decode()
+
+        self.assertIn(f'src="/web2/img/1200/{self.name}"', body)
+        self.assertIn(f'src="/web2/img/800/{self.name}"', body)
+        self.assertNotIn(f'src="{settings.MEDIA_URL}{self.name}"', body)
+
+    def test_copy_is_resized_webp_with_transparency_and_cached(self):
+        from PIL import Image
+
+        response = self.client.get(f'/web2/img/800/{self.name}')
+        content = b''.join(response.streaming_content)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'image/webp')
+        self.assertIn('max-age=2592000', response['Cache-Control'])
+        with Image.open(BytesIO(content)) as image:
+            self.assertEqual((image.format, image.size, image.mode), ('WEBP', (800, 533), 'RGBA'))
+
+        again = self.client.get(f'/web2/img/800/{self.name}', HTTP_IF_MODIFIED_SINCE=response['Last-Modified'])
+        self.assertEqual(again.status_code, 304)
+
+    def test_bad_requests_return_404(self):
+        for url in (
+            f'/web2/img/999/{self.name}',            # width not allowed
+            '/web2/img/800/web2/landingpage/missing.png',
+            '/web2/img/800/../../../etc/passwd.png',
+            '/web2/img/800/web2/landingpage/logo.svg',
+        ):
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 404)
+
+    def test_unconvertible_image_falls_back_to_original(self):
+        Path(self.media_root, 'web2/landingpage/broken.png').write_bytes(b'not an image')
+
+        response = self.client.get('/web2/img/800/web2/landingpage/broken.png')
+
+        self.assertRedirects(response, f'{settings.MEDIA_URL}web2/landingpage/broken.png', fetch_redirect_response=False)
+
+    def test_filter_keeps_original_url_for_svg_and_blank(self):
+        from web2.templatetags.image_tags import image_url
+
+        self.assertEqual(image_url(Lan_PageBanModel(img='web2/landingpage/logo.svg').img, 800), f'{settings.MEDIA_URL}web2/landingpage/logo.svg')
+        self.assertEqual(image_url(Lan_PageBanModel().img, 800), '')
+
+    def test_optimize_images_command_creates_all_sizes(self):
+        Lan_PageBanModel.objects.create(user=self.user, img=self.name)
+        out = StringIO()
+
+        call_command('optimize_images', stdout=out)
+
+        self.assertIn('3 image copies ready, 0 skipped.', out.getvalue())
+        for width in (400, 800, 1200):
+            self.assertTrue(Path(self.media_root, '_optimized', str(width), f'{self.name}.webp').exists())

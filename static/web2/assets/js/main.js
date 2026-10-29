@@ -301,8 +301,12 @@
       mirror: false
     });
   }
+  // Start when the HTML is ready, not on window "load": waiting for every image,
+  // the map and the fonts kept the hero (and all data-aos content) invisible.
+  // Positions are re-measured once images have loaded.
+  aos_init();
   window.addEventListener('load', () => {
-    aos_init();
+    AOS.refresh();
   });
 
   /**
@@ -398,10 +402,14 @@
     })
   })
 
-  // Start after fonts load and AOS starts the fade-in, so the typing is visible.
-  window.addEventListener('load', () => {
-    select('[data-typing]', true).forEach(typeHeading)
-  })
+  // Start once the fonts are ready (not after every image on the page), so the
+  // typing runs during the AOS fade-in.
+  const startTyping = () => select('[data-typing]', true).forEach(typeHeading)
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(startTyping)
+  } else {
+    window.addEventListener('load', startTyping)
+  }
 
   /**
    * Analytics: send enquiries, phone, WhatsApp and email clicks as GA4 lead
