@@ -1,0 +1,399 @@
+
+{% extends "web2/wbase.html" %}
+{% block title %}Welcome to INITIATOR SOLUTIONS{% endblock %} 
+
+{% block metadata %}
+  <meta content="We Are Software Development & All Accounting Software Solutions company INITIATOR SOLUTIONS is one of the best in Website Development, Web Design, E-Commerce Development, Web Portal Development , CRM Software Development, LML Module, Distributor Module Development, Online Accounting or Invoicing Module Development , Digital Marketing, Graphics Designing, Mobile Application Development Android, IOS & All Accounting Software Integration Like Tally Customization, Tally Integration, All Tally customized Vertical Solution, SAP ,Microsoft & other Accounting software Integration etc. INITIATOR SOLUTIONS is also Authorized Solution Partner In -- Tally, Busy, SAP, Zoho Etc." name="description">
+  <meta content="Software Developement,Tally Customization,Tally Integration,Tally Customization & Integration, 
+  Tally Partner In Noida,Tally Partner In India,Tally Partner In UAE,Tally Partner In Dubai,Website Development,Web Design,E-Commerce Development,
+  Web Portal Development,CRM Software Development,Distributor Module Development,LML Module,Mobile Application Development Android & IOS,
+  All Accounting Software,Tally Prime,Busy Software,Zoho Book,INITIATOR SOLUTIONS,initiator solutions,INITIATORSOLUTIONS,INITIATOR SOLUTION,
+  initiator solution,software company in noida,software company in india,software company in Dubai,software company in uae,top website Developement company,
+  Tally 5 star Partner ,Tally 5 star Partner in noida,Tally 5 star Partner in Noida,Tally Support number 8882595800,Tally Support number in dubai" name="keywords">
+  {% endblock %}
+
+
+{% load static %}
+
+
+
+ {% block content %}
+
+  <!-- ======= Banner Start ======= -->
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="hero d-flex align-items-center">
+
+	{% for i in lanbanpage %}
+
+    <div class="container ">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center data-aos="fade-up" data-aos-delay="200"">
+          <h1 data-aos="fade-up">{{i.Slogen}}</h1>
+          <h2 data-aos="fade-up" data-aos-delay="400">{{i.Slogen2}}</h2>
+          <div data-aos="fade-up" data-aos-delay="600">
+            <div class="text-center text-lg-start">
+				
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">
+          <img src="{{i.img.url }}" class="img-fluid" alt="{{i.imagalt}}" title="{{i.imagalt}}">
+        </div>
+      </div>
+    </div>
+	{% endfor %}
+
+  </section><!-- End Hero -->
+  <!-- =======  Banner END ======= -->
+
+  <!-- ======= About us Start ======= -->
+
+  <main id="main">
+		<!-- ======= About Section ======= -->
+		{% for ab in aboutus %}
+		<section id="about" class="about">
+			
+		  <div class="container" data-aos="fade-up">
+			<div class="row gx-0">
+
+			  <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+				<div class="content">
+				  <h3>Who We Are</h3>
+				  <h2>{{ab.text1}}</h2>
+				  <p>
+					{{ab.text2}}
+				  </p>
+				  <div class="text-center text-lg-start">
+					<a href="{% url 'aboutus' %}" class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+					  <span>Read More</span>
+					  <i class="bi bi-arrow-right"></i>
+					</a>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+				<img src="{{ab.img.url }}" class="img-fluid" alt="{{ab.imagalt}}" title="{{ab.imagalt}}">
+			  </div>
+
+			</div>
+		  </div>
+		  
+
+		</section><!-- End About Section -->
+
+		<!-- ======= Counts Section ======= -->
+		<section id="counts" class="counts">
+		  <div class="container" data-aos="fade-up">
+
+			<div class="row gy-4">
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-emoji-smile"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.client}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Happy Clients</p>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-journal-richtext" style="color: #ee6c20;"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.project}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Projects</p>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-headset" style="color: #15be56;"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.hrs}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Hours Of Support</p>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-people" style="color: #bb0852;"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.emp}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Hard Workers</p>
+				  </div>
+				</div>
+			  </div>
+
+			</div>
+
+		  </div>
+		  
+		</section><!-- End Counts Section -->
+		{% endfor %}
+
+  <!-- ======= About us END ======= -->
+
+
+
+<!-- ======= Product Data ======= -->
+  <section id="values" class="values" >
+    <div class="container" data-aos="fade-up">
+
+      <header class="section-header">
+        <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Our Products</h2>
+      </header>
+
+      <div class="row">
+        {% for i in product %}
+
+		<div class="col-lg-4 mt-4">
+          <div class="box border" data-aos="fade-up" data-aos-delay="200">
+            <img src="{{i.img.url}}" class="img-fluid" alt="{{i.image_alt|default:i.title}}" title="{{i.image_alt|default:i.title}}">
+            <h3>{{i.title}}</h3>
+            {% if i.short_description %}<p class="text-dark">{{i.short_description|striptags}}</p>{% endif %}
+
+			
+          </div>
+		  
+        </div>
+		
+
+        {% endfor %}
+
+  </section> <!-- ======= END Product Data ======= -->
+
+
+<!-- ======= Services Data ======= -->
+<section id="values" class="values" >
+    <div class="container" data-aos="fade-up">
+
+      <header class="section-header">
+        <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Our Services</h2>
+      </header>
+
+      <div class="row">
+        {% for i in services %}
+
+		<div class="col-lg-4 mt-4">
+          <div class="box border" data-aos="fade-up" data-aos-delay="200">
+            <a href="{{ i.get_absolute_url }}" title="{{ i.display_title }}">
+              {% if i.img %}
+                <img src="{{i.img.url}}" class="img-fluid" alt="{{i.image_alt|default:i.display_title}}" title="{{i.image_alt|default:i.display_title}}">
+              {% else %}
+                <img src="{% static 'web2/assets/img/features-2.png' %}" class="img-fluid" alt="{{i.display_title}}" title="{{i.display_title}}">
+              {% endif %}
+            </a>
+            <h3><a href="{{ i.get_absolute_url }}" title="{{ i.display_title }}">{{i.display_title}}</a></h3>
+            {% if i.short_description %}<p class="text-dark">{{i.short_description|striptags}}</p>{% endif %}
+          
+          </div>
+		  
+        </div>
+		
+
+        {% endfor %}
+
+  </section> <!-- ======= END Services Data ======= -->
+	
+
+  <!-- ======= Team Section ======= -->
+  <section id="team" class="team">
+
+	<div class="container" data-aos="fade-up">
+
+	    <header class="section-header">
+			<h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Our Team</h2>
+		  </header>
+	
+
+	  <div class="row gy-4">
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team">
+			  <div class="social">
+				
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. Mohammed</h4>
+			  <span>Chief Executive Officer</span>
+			  <p>Mr. Mohammed Chief Executive Officer in Initiator Solutions </p>
+			</div>
+		  </div>
+		</div>
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team">
+			  <div class="social">
+				
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. Maddy</h4>
+			  <span>Product Manager</span>
+			  <p>Mr. Maddy Chief Product Manager for All  Customized Software in Initiator Solutions </p>			</div>
+		  </div>
+		</div>
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team">
+			  <div class="social">
+			
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. Raju</h4>
+			  <span>CTO</span>
+			  <p><p>Mr. Raju Senior Developer  for All  Customized Software in Initiator Solutions </p></p>
+			</div>
+		  </div>
+		</div>
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team">
+			  <div class="social">
+			
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. DK</h4>
+			  <span>Accountant</span>
+			  <p><p>Mr. DK Senior Accountant  in Initiator Solutions </p></p>			</div>
+		  </div>
+		</div>
+
+	  </div>
+
+	</div>
+
+  </section><!-- End Team Section -->
+
+
+
+
+  <!-- ======= Team Start ======= -->
+
+
+
+<!-- ======= Contact Us ======= -->
+
+<!-- ======= Contact Section ======= -->
+<section id="contact" class="contact pt-0">
+
+	<div class="container" data-aos="fade-up">
+
+	  <header class="section-header">
+	   <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Contact Us</h2>
+		<p></p>
+	  </header>
+
+	  <div class="row gy-4">
+
+		<div class="col-lg-6">
+
+		  <div class="row gy-4">
+
+
+			{% for cont_lists in cont_list %}
+			<div class="col-md-6">
+			  <div class="info-box">
+				<i class="{{cont_lists.iconcode}}"></i>
+				<h3>{{cont_lists.title}}</h3>
+				<p>{{cont_lists.p1}}</p>
+				<p>{{cont_lists.p2}}</p>
+				<p>{{cont_lists.p3}}</p>
+			  </div>
+			</div>
+			  {% endfor %}
+
+		  </div>
+
+		</div>
+
+		<div class="col-lg-6">
+		  <form action="{% url 'contact_email' %}" method="post" class="" autocomplete="off">
+			{% csrf_token %}
+			<div class="row gy-4">
+
+			  <div class="col-md-6">
+				<input type="text" name="name" class="form-control" placeholder="Your Name" required>
+			  </div>
+
+			   <div class="col-md-6">
+				<input type="text" name="cmpname" class="form-control" placeholder="Your Company Name" required>
+			  </div>
+
+			  <div class="col-md-6">
+				<input type="text" name="mob" class="form-control" placeholder="Your Mobile No." required>
+			  </div>
+			  <div class="col-md-6 ">
+				<input type="email" class="form-control" name="email" placeholder="Your Email" required>
+			  </div>
+
+
+			  <div class="col-md-12">
+				<input type="text" class="form-control" name="subject" placeholder="Subject" required>
+			  </div>
+
+			  <div class="col-md-12">
+				<textarea class="form-control" name="message" rows="3" placeholder="Message" required></textarea>
+			  </div>
+
+			  <div class="col-md-12 text-center">
+			   
+
+				<button type="submit" class=" btn btn-outline-primary" style="width: 50%;">Send Message</button>
+			  </div>
+
+			</div>
+		  </form>
+
+		</div>
+	  </div>
+		<br>
+		<br>
+	  
+		<!--I Frame Details Here Show all--->
+	<div class="col-md-12 container p-1">
+
+	<iframe class="mb-4 mb-lg-0" title="INITIATOR SOLUTIONS"
+	src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.923177622704!2d77.33552571460267!3d28.572069493566687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cebc84d23bcff%3A0x18c6aa04618de1d!2sINITIATOR%20SOLUTIONS!5e0!3m2!1sen!2sin!4v1676552503138!5m2!1sen!2sin" frameborder="0" style="border:0; width: 100%; height: 384px;" allowfullscreen></iframe>
+
+
+
+
+	 
+	 </div> 
+
+	<!-- END I Frame Details Here Show all--->
+
+
+	  
+
+	</div>
+
+
+  </section><!-- End Contact Section -->
+
+
+<!-- ======= END Contact Us ======= -->
+
+
+
+
+
+  </main>
+
+ {% endblock %}

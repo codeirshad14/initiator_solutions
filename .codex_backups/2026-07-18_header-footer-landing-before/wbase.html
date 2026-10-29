@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>{% block title %}{{ site_seo.default_title }}{% endblock %}</title>
+
+  {% block metadata %}
+  <meta content="{{ site_seo.default_description }}" name="description">
+  <meta content="{{ site_seo.default_keywords }}" name="keywords">
+  {% endblock %}
+  {% include "web2/partials/seo_meta.html" %}
+
+  {% load static %}
+
+  <!-- Favicons -->
+  <link href="{% static 'web2\assets\img\logo\NW\favicon\2\favicon-96x96.png' %}" rel="icon">
+  <link href="{% static 'web2\assets\img\logo\NW\favicon\2\favicon-96x96.png' %}" rel="apple-touch-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'web2\assets\vendor\bootstrap\css\bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'web2\assets\vendor\bootstrap-icons\bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'web2\assets\vendor\aos\aos.css'%}" rel="stylesheet">
+  <link href="{% static 'web2\assets\vendor\remixicon\remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'web2\assets\vendor\swiper\swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'web2\assets\vendor\glightbox\css\glightbox.min.css '%}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'web2\assets\css\style.css' %}" rel="stylesheet">
+
+  <style>
+    .enquiry-modal .modal-dialog {
+      max-width: 680px;
+    }
+
+    .enquiry-modal .modal-content {
+      overflow: hidden;
+      border: 1px solid rgba(65, 84, 241, 0.18);
+      border-radius: 8px;
+      box-shadow: 0 24px 60px rgba(1, 41, 112, 0.22);
+    }
+
+    .enquiry-modal .modal-header {
+      align-items: flex-start;
+      border-bottom: 0;
+      background: linear-gradient(135deg, #012970, #4154f1);
+      color: #fff;
+      padding: 14px 18px;
+    }
+
+    .enquiry-modal .modal-title {
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .enquiry-modal .modal-subtitle {
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 13px;
+      line-height: 1.35;
+      margin: 3px 0 0;
+    }
+
+    .enquiry-modal .close {
+      color: #fff;
+      opacity: 1;
+      text-shadow: none;
+    }
+
+    .enquiry-modal .modal-body {
+      padding: 16px 18px 18px;
+      background: linear-gradient(160deg, #ffffff 0%, #f6f9ff 100%);
+    }
+
+    .enquiry-quick-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .enquiry-quick-item {
+      padding: 8px 10px;
+      border: 1px solid rgba(65, 84, 241, 0.14);
+      border-radius: 8px;
+      background: #fff;
+      color: #012970;
+      font-family: "Nunito", sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .enquiry-quick-item i {
+      display: block;
+      color: #4154f1;
+      font-size: 18px;
+      margin-bottom: 3px;
+    }
+
+    .enquiry-form label {
+      color: #012970;
+      font-family: "Nunito", sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .enquiry-form .form-control {
+      min-height: 38px;
+      border: 1px solid rgba(65, 84, 241, 0.18);
+      border-radius: 8px;
+      color: #34405c;
+      box-shadow: none;
+      font-size: 14px;
+      padding: 7px 10px;
+    }
+
+    .enquiry-form textarea.form-control {
+      min-height: 78px;
+    }
+
+    .enquiry-form .form-control:focus {
+      border-color: #4154f1;
+      box-shadow: 0 0 0 0.15rem rgba(65, 84, 241, 0.12);
+    }
+
+    .enquiry-submit-btn {
+      min-width: 190px;
+      border-radius: 8px;
+      color: #fff;
+      background: #4154f1;
+      border-color: #4154f1;
+      font-family: "Nunito", sans-serif;
+      font-weight: 800;
+      padding: 9px 18px;
+      box-shadow: 0 10px 24px rgba(65, 84, 241, 0.22);
+    }
+
+    .enquiry-modal .compact-field {
+      margin-bottom: 10px;
+    }
+
+    .enquiry-submit-btn:hover {
+      color: #fff;
+      background: #5969f3;
+    }
+
+    @media (max-width: 575.98px) {
+      .enquiry-quick-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+      <!-- custome js Main CSS File -->
+  {% block css %}{% endblock%}
+  {% block jss %}{% endblock%}
+
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center" title="Initiator Solutions">
+        <img src="{% static 'web2\assets\img\logo\InitiatorLogo & Company Name.png' %}" alt="Initiator Solutions"  title="Initiator Solutions Logo">
+
+      </a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="{% url 'index' %}" title="Home">Home</a></li>
+          <li class="dropdown"><a href="{% url 'aboutus' %}" title="About Us"><span>About us</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="{% url 'aboutus' %}"  title="Who We Are">Who We Are</a></li>
+              <li><a href="{% url 'portfolio' %}" title="Our Portfolio">Our Portfolio</a></li>
+              
+              </li>
+              <!--
+              <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li>-->
+            </ul>
+          </li>
+         <!--<li><a class="nav-link scrollto" href="#services">Services</a></li>-->
+         <li><a class="nav-link scrollto" href="{% url 'web_product' %}" title="Our Products">Products</a></li>
+
+          <li><a class="nav-link scrollto" href="{% url 'web_dev' %}" title="Services">Services</a></li>
+          <li><a class="nav-link scrollto" href="{% url 'our_module_services'%}" title="Our Modules">Our Modules</a></li> 
+          <!--<li><a class="nav-link scrollto" href="#team">Team</a></li> user@123--> 
+          <li><a href="{% url 'homeblog'%}" title="Blog">Blog</a></li>
+
+          <li><a class="nav-link scrollto" href="{% url 'contact'%}" title="Contact us">Contact</a></li>
+         <!--<li><a class="nav-link scrollto" href="#contact">Log In</a></li>-->
+          <li><button class="getstarted scrollto btn btn-primary" href="#newcontact"  title="Contact us" data-toggle="modal" data-target="#exampleModal">Enquire Now</button></li>
+
+
+
+
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header><!-- End Header -->
+  
+  {% block content %}
+
+
+  {% endblock %}
+
+
+    <!-- ======= Enquirty Model  Here  ======= -->
+
+    <div class="modal fade" id="newcontact" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog  modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title" id="staticBackdropLabel">New Contact</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+    
+           <!--all New model contact detai l div-->
+    
+            <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>Name</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.name}}
+             </div>
+    
+           </div><!--  end row details start-->
+    
+            <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>Address</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.address}}
+             </div>
+           </div><!--  end row details start-->
+    
+           <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>City</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.city}}
+             </div>
+           </div><!--  end row details start-->
+    
+           <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>State</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.state}}
+             </div>
+           </div><!--  end row details start-->
+    
+          <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>Country</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.country}}
+             </div>
+           </div><!--  end row details start-->
+    
+           <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>Website</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.website}}
+             </div>
+           </div><!--  end row details start-->
+    
+           <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>Email</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.email}}
+             </div>
+           </div><!--  end row details start-->
+    
+            <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>Mobile No.</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.mob}}
+             </div>
+           </div><!--  end row details start-->
+    
+           <div class="form-group row" > <!--row details start-->
+            <div class="col-sm-3 col-form-label col-form-label-sm">
+            <label for="colmode" class=""><strong>GSTIN</strong></label>
+            </div>
+    
+             <div class="col-sm-9">
+             {{contact.gst}}
+             </div>
+           </div><!--  end row details start-->
+    
+    
+              <!-- End all New model contact detai l div-->
+         </div>
+          <div class="modal-footer">
+    
+            <a class="btn btn-danger text-white" data-dismiss="modal">Close</a>
+            <button type="submit" class="btn btn-primary" >Save Contact</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="footer-newsletter">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-12 text-center">
+            <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Our Newsletter</h2>
+
+            <p></p>
+          </div>
+          <div class="col-lg-6">
+            <form action="{% url 'news_letter' %}" method="post">
+                  {% csrf_token %}
+
+              <input type="email" name="name" class="form-control form-control-sm" ><input type="submit" value="Subscribe">
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!--All  Model  Details -->
+
+<!-- Button trigger modal 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>-->
+
+<!-- Modal -->
+<div class="modal fade enquiry-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title" id="exampleModalLabel">Enquire Now</h5>
+          <p class="modal-subtitle">Share your logical requirement</p>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="enquiry-quick-row">
+          <div class="enquiry-quick-item"><i class="bi bi-whatsapp"></i> WhatsApp Support</div>
+          <div class="enquiry-quick-item"><i class="bi bi-telephone-outbound"></i> Quick Call Back</div>
+          <div class="enquiry-quick-item"><i class="bi bi-envelope"></i> Email Response</div>
+        </div>
+
+        <form action="{% url 'contact_email' %}" method="post" class="enquiry-form" autocomplete="off">
+          {% csrf_token %}
+          <div class="row">
+
+            <div class="col-md-6 compact-field">
+              <label for="modal-contact-name">Your Name</label>
+              <input id="modal-contact-name" type="text" name="name" class="form-control" placeholder="Your Name" required>
+            </div>
+
+             <div class="col-md-6 compact-field">
+              <label for="modal-contact-company">Company Name</label>
+              <input id="modal-contact-company" type="text" name="cmpname" class="form-control" placeholder="Company Name" required>
+            </div>
+
+            <div class="col-md-6 compact-field">
+              <label for="modal-contact-mobile">Mobile Number</label>
+              <input id="modal-contact-mobile" type="text" name="mob" class="form-control" placeholder="Mobile Number" required>
+            </div>
+            <div class="col-md-6 compact-field">
+              <label for="modal-contact-email">Email Address</label>
+              <input id="modal-contact-email" type="email" class="form-control" name="email" placeholder="Email Address" required>
+            </div>
+
+
+            <div class="col-md-12 compact-field">
+              <label for="modal-contact-subject">Subject</label>
+              <input id="modal-contact-subject" type="text" class="form-control" name="subject" placeholder="Subject" required>
+            </div>
+
+            <div class="col-md-12 compact-field">
+              <label for="modal-contact-message">Message</label>
+              <textarea id="modal-contact-message" class="form-control" name="message" rows="3" placeholder="Write your requirement here" required></textarea>
+            </div>
+
+            <div class="col-md-12 text-center">
+
+              <button type="submit" class="btn enquiry-submit-btn"><i class="bi bi-send"></i> Send Message</button>
+            </div>
+
+          </div>
+        </form>
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+ <!--All  Model  Details -->
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-10 footer-info">
+            <a href="{% url 'index' %}" title="Home" class="logo d-flex align-items-center pt-2">
+              <!--<img src="assets/img/logo/InitiatorLogo & Company Name.png" alt="">-->
+
+              <span class="text-wrap">INITIATOR SOLUTIONS</span>
+            </a>
+            <p class="pt-2">Initiator Solutions is  India's Leading Business Management Software Development Company & All Accounting Software Solutions Providers,</p>
+            <br>
+          
+            <div class="social-links mt-3">
+              <a href="https://www.facebook.com/irshad.initiator" title="facebook" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/initiator_solutions/" title="instagram" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/initiator-solutions-222475210/"  title="linkedin" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              <a href="https://twitter.com/InitiatorSolut1" class="twitter" title="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="https://www.youtube.com/@codingpilot96" class="linkedin" title="youtube"><i class="bi bi-youtube" style="font-size: 30px;"></i></a>
+
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'index' %}" title="Home">Home</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'aboutus' %}"  title="About us">About us</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'web_dev' %}" title="Services">Services</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'web_product' %}" title="Products">Products</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'our_module_services'%}" title="Modules">Our Modules</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'web_design' %}" title="Web Design">Web Design</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'web_dev' %}"  title="Web Development">Web Development</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'web_product' %}" title="Tally Prime Product">Tally Prime Product</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'digi_mkt' %}"  title="Digital Marketing">Digital Marketing</a></li> 
+              <li><i class="bi bi-chevron-right"></i> <a href="{% url 'graphics_design' %}" title="Graphic Design">Graphic Design</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-12 footer-contact text-center text-md-start">
+            <h4>Contact Us</h4>
+            <p>
+              <strong>
+              B-7 Ist Floor Noida Sector-2 <br>
+              Near Noida Sector-15 Metro Station<br>
+              Uttar Pradesh 201301 India.</strong> <br><br>
+              <strong>Mobile No: +91 888 2595 800</strong><br>
+              <strong>Email  &nbsp;  &nbsp; &nbsp;&nbsp;   : info@initiatorsolutions.com </strong><br>
+              <strong>Website  &nbsp;     : <a href="http://www.initiatorsolutions.com/" title="Website">www.initiatorsolutions.com</a></strong><br>
+
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!--<div class="copyright">
+        &copy; Copyright <strong><span>INITIATOR SOLUTIONS</span></strong>. All Rights Reserved
+      </div>-->
+      <div class="credits">
+
+        Designed & Developed by   <a href="http://www.initiatorsolutions.com/" title="Website">INITIATOR SOLUTIONS</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center" title="Website"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'web2\assets\vendor\bootstrap\js\bootstrap.bundle.js' %}"></script>
+  <script src="{% static 'web2\assets\vendor\aos\aos.js' %}"></script>
+  <script src="{% static 'web2\assets\vendor\php-email-form\validate.js' %}"></script>
+  <script src="{% static 'web2\assets\vendor\swiper\swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'web2\assets\vendor\purecounter\purecounter.js'%}"></script>
+  <script src="{% static 'web2\assets\vendor\isotope-layout\isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'web2\assets\vendor\glightbox\js\glightbox.min.js' %}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'web2\assets\js\main.js' %}"></script>
+
+</body>
+
+</html>

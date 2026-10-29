@@ -1,0 +1,1185 @@
+
+{% extends "web2/wbase.html" %}
+{% block title %}{{ seo_title|default:"Welcome to INITIATOR SOLUTIONS" }}{% endblock %} 
+
+{% block metadata %}
+  <meta content="{{ seo_description }}" name="description">
+  <meta content="{{ seo_keywords }}" name="keywords">
+  {% endblock %}
+
+
+{% load static %}
+
+{% block css %}
+<style>
+  .landing-hero {
+    min-height: 92vh;
+    padding-top: 96px;
+  }
+
+  .landing-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 9px 13px;
+    border: 1px solid rgba(65, 84, 241, 0.16);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    color: #4154f1;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.2;
+    box-shadow: 0 12px 26px rgba(1, 41, 112, 0.08);
+  }
+
+  .landing-hero-badge i {
+    color: #18bb93;
+    font-size: 18px;
+  }
+
+  .landing-hero h1 {
+    max-width: 680px;
+    margin-top: 18px;
+    font-family: "Poppins", sans-serif;
+    font-size: 50px;
+    font-weight: 800;
+    line-height: 1.12;
+  }
+
+  .landing-hero h1 .hero-title-accent {
+    color: #4154f1;
+  }
+
+  /* Typing animation (static/web2/assets/js/main.js). Untyped letters keep their
+     space; the cursor has zero width so it never moves the text. */
+  .landing-hero h1 .typing-rest {
+    visibility: hidden;
+  }
+
+  .landing-hero h1 .typing-caret {
+    display: inline-block;
+    width: 0;
+    height: 0.9em;
+    vertical-align: -0.08em;
+    box-shadow: 3px 0 0 #4154f1;
+    animation: hero-caret-blink 0.8s step-end infinite;
+  }
+
+  @keyframes hero-caret-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .landing-hero h2 {
+    max-width: 620px;
+    margin-top: 18px;
+    color: #34405c;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .landing-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .landing-btn-primary,
+  .landing-btn-outline {
+    border-radius: 8px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 12px 20px;
+  }
+
+  .landing-btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, #4154f1, #1b94bf);
+    border: 0;
+    box-shadow: 0 14px 30px rgba(65, 84, 241, 0.24);
+  }
+
+  .landing-btn-primary:hover {
+    color: #fff;
+    background: linear-gradient(135deg, #5969f3, #18bb93);
+  }
+
+  .landing-btn-outline {
+    color: #4154f1;
+    background: rgba(255, 255, 255, 0.80);
+    border: 1px solid rgba(65, 84, 241, 0.20);
+  }
+
+  .landing-trust-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .landing-trust-row span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border: 1px solid rgba(65, 84, 241, 0.14);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.78);
+    color: #012970;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .landing-trust-row i {
+    color: #18bb93;
+  }
+
+  .landing-section-soft {
+    background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+  }
+
+  .landing-about {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+  }
+
+  .landing-about-card {
+    position: relative;
+    overflow: hidden;
+    padding: 34px;
+    border: 1px solid rgba(65, 84, 241, 0.14);
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffffff 0%, #f6f9ff 58%, #ffffff 100%);
+    box-shadow: 0 22px 52px rgba(1, 41, 112, 0.11);
+  }
+
+  .landing-about-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #4154f1, #18bb93);
+  }
+
+  .landing-about .content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 10px 12px 10px 0;
+    background: transparent;
+  }
+
+  .landing-about .content h3 {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 8px;
+    background: rgba(65, 84, 241, 0.08);
+    color: #4154f1;
+    letter-spacing: 0;
+    margin-bottom: 14px;
+  }
+
+  .landing-about .content h2 {
+    font-family: "Poppins", sans-serif;
+    font-size: 28px;
+    line-height: 1.28;
+    font-weight: 800;
+  }
+
+  .landing-about .content p {
+    color: #34405c;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .about-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 22px 0 26px;
+  }
+
+  .about-feature {
+    min-height: 100%;
+    padding: 14px 12px;
+    border: 1px solid rgba(65, 84, 241, 0.10);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #012970;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .about-feature i {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 9px;
+    border-radius: 8px;
+    color: #fff;
+    background: linear-gradient(135deg, #4154f1, #18bb93);
+    font-size: 17px;
+  }
+
+  .landing-about-media {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.62);
+  }
+
+  .landing-about-media img {
+    width: 100%;
+    max-height: 390px;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 28px rgba(1, 41, 112, 0.12));
+  }
+
+  .landing-about-badge {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid rgba(65, 84, 241, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #012970;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 12px 26px rgba(1, 41, 112, 0.09);
+  }
+
+  .landing-about-badge i {
+    color: #18bb93;
+    font-size: 18px;
+  }
+
+  .landing-about .btn-read-more {
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4154f1, #1b94bf);
+    box-shadow: 0 12px 26px rgba(65, 84, 241, 0.22);
+  }
+
+  .landing-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(65, 84, 241, 0.16) !important;
+    border-radius: 8px;
+    background: linear-gradient(160deg, #ffffff 0%, #f6f9ff 100%);
+    box-shadow: 0 14px 35px rgba(1, 41, 112, 0.10);
+  }
+
+  .landing-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #4154f1, #18bb93);
+  }
+
+  .landing-card img {
+    max-height: 165px;
+    width: 100%;
+    object-fit: contain;
+    padding: 18px 28px !important;
+  }
+
+  .landing-card h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .landing-card h3 a {
+    color: #012970;
+  }
+
+  .landing-card p {
+    display: -webkit-box;
+    min-height: 48px;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    color: #34405c !important;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .landing-card-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .landing-card-actions .btn {
+    border-radius: 8px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 8px 13px;
+  }
+
+  .counts .count-box,
+  .team .member,
+  .contact .info-box {
+    border: 1px solid rgba(65, 84, 241, 0.12);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 14px 32px rgba(1, 41, 112, 0.08);
+  }
+
+  .team .member {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .team .member:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 46px rgba(1, 41, 112, 0.13);
+  }
+
+  .team .member .member-img {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 0.82;
+    background: linear-gradient(180deg, #f6f9ff 0%, #ffffff 100%);
+  }
+
+  .team .member .member-img::after {
+    content: "";
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 0;
+    height: 4px;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(90deg, #4154f1, #18bb93);
+  }
+
+  .team .member .member-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .team .member .member-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 18px 22px;
+    text-align: left;
+  }
+
+  .team .member .member-info h4 {
+    font-family: "Poppins", sans-serif;
+    color: #012970;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .team .member .member-info span {
+    align-self: flex-start;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(65, 84, 241, 0.08);
+    color: #4154f1;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .team .member .member-info p {
+    margin: 13px 0 0;
+    color: #5b6683;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .contact .info-box {
+    min-height: 100%;
+    position: relative;
+    overflow: hidden;
+    padding: 26px 22px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .contact .info-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 42px rgba(1, 41, 112, 0.12);
+  }
+
+  .contact .info-box i {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    color: #fff;
+    background: linear-gradient(135deg, #4154f1, #18bb93);
+    font-size: 22px;
+  }
+
+  .contact .info-box h3 {
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .contact .info-box p {
+    color: #5b6683;
+    line-height: 1.55;
+  }
+
+  .landing-support {
+    background: linear-gradient(135deg, #012970 0%, #4154f1 100%);
+    color: #fff;
+  }
+
+  .landing-support .section-header h2,
+  .landing-support .section-header p {
+    color: #fff !important;
+  }
+
+  .landing-support .landing-btn-outline {
+    color: #012970;
+    background: #fff;
+    border-color: rgba(255, 255, 255, 0.34);
+  }
+
+  .support-box {
+    height: 100%;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 40px rgba(1, 22, 61, 0.18);
+  }
+
+  .support-box i {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .support-box h3 {
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .support-box p {
+    color: rgba(255, 255, 255, 0.86);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .landing-contact-form,
+  .landing-map {
+    padding: 28px;
+    border: 1px solid rgba(65, 84, 241, 0.14);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 16px 35px rgba(1, 41, 112, 0.08);
+  }
+
+  .landing-contact-form {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .landing-contact-form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #4154f1, #18bb93);
+  }
+
+  .contact-form-head {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .contact-form-head i {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 42px;
+    border-radius: 8px;
+    color: #fff;
+    background: linear-gradient(135deg, #4154f1, #18bb93);
+    font-size: 20px;
+  }
+
+  .contact-form-head h3 {
+    margin: 0 0 4px;
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+  }
+
+  .contact-form-head p {
+    margin: 0;
+    color: #5b6683;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .landing-contact-panel {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .contact-modal-list {
+    display: grid;
+    gap: 10px;
+    margin: 4px 0 22px;
+  }
+
+  .contact-modal-list span {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 12px;
+    border: 1px solid rgba(65, 84, 241, 0.12);
+    border-radius: 8px;
+    background: #f6f9ff;
+    color: #34405c;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .contact-modal-list i {
+    color: #18bb93;
+    font-size: 18px;
+  }
+
+  .contact-modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .contact-modal-actions .btn {
+    border-radius: 8px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 10px 16px;
+  }
+
+  .landing-contact-form label {
+    color: #012970;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .landing-contact-form .form-control {
+    min-height: 44px;
+    border-radius: 8px;
+    border-color: rgba(65, 84, 241, 0.16);
+    box-shadow: none;
+  }
+
+  .landing-contact-form textarea.form-control {
+    min-height: 110px;
+  }
+
+  .landing-contact-form .form-control:focus {
+    border-color: #4154f1;
+    box-shadow: 0 0 0 0.15rem rgba(65, 84, 241, 0.12);
+  }
+
+  .landing-contact-form button[type=submit] {
+    width: auto !important;
+    min-width: 190px;
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    background: linear-gradient(135deg, #4154f1, #1b94bf);
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 10px 20px;
+  }
+
+  .landing-map iframe {
+    border-radius: 8px;
+  }
+
+  @media (max-width: 991.98px) {
+    .landing-hero {
+      min-height: auto;
+    }
+
+    .landing-hero-badge {
+      margin: 0 auto;
+    }
+
+    .landing-hero h1 {
+      font-size: 36px;
+      text-align: center;
+    }
+
+    .landing-hero h2 {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .landing-hero-actions,
+    .landing-trust-row {
+      justify-content: center;
+    }
+
+    .about-feature-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .landing-about-card {
+      padding: 24px;
+    }
+
+    .landing-about .content {
+      padding: 0;
+    }
+
+    .landing-about-media {
+      min-height: auto;
+      padding: 12px;
+    }
+  }
+</style>
+{% endblock %}
+
+
+
+ {% block content %}
+
+  <!-- ======= Banner Start ======= -->
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="hero landing-hero d-flex align-items-center">
+
+	{% for i in lanbanpage %}
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="landing-hero-badge" data-aos="fade-up">
+            <i class="bi bi-stars"></i>
+            <span>Fully Automation</span>
+          </div>
+          <h1 data-aos="fade-up" data-aos-delay="200" data-typing>Let's Initiate Your Business With <span class="hero-title-accent">Initiator Solutions</span></h1>
+          <h2 data-aos="fade-up" data-aos-delay="400">Noida-based software company for TallyPrime customization, Tally integration, Tally on Cloud, Tally AI, Tally training, Zoho Books and web application development.</h2>
+          <div data-aos="fade-up" data-aos-delay="600">
+            <div class="landing-hero-actions text-center text-lg-start">
+              <a href="{% url 'web_dev' %}" class="landing-btn-primary d-inline-flex align-items-center justify-content-center" title="Services">
+                <span>Explore Services</span>
+                <i class="bi bi-arrow-right ml-2"></i>
+              </a>
+              <button type="button" class="landing-btn-outline d-inline-flex align-items-center justify-content-center" title="Enquire Now" data-toggle="modal" data-target="#exampleModal">
+                <i class="bi bi-send mr-2"></i>
+                <span>Enquire Now</span>
+              </button>
+            </div>
+            <div class="landing-trust-row">
+              <span><i class="bi bi-check-circle"></i> Tally Customization</span>
+              <span><i class="bi bi-check-circle"></i> ERP & Modules</span>
+              <span><i class="bi bi-check-circle"></i> website support</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">
+          {% if i.img %}
+            <img src="{{ i.img.url }}" class="img-fluid" alt="{{ i.imagalt|default:'Initiator Solutions banner' }}" title="{{ i.imagalt|default:'Initiator Solutions banner' }}" fetchpriority="high">
+          {% else %}
+            {% include "web2/partials/no_image.html" with placeholder_class="no-image-hero" placeholder_label="No banner image available" %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+	{% endfor %}
+
+  </section><!-- End Hero -->
+  <!-- =======  Banner END ======= -->
+
+  <!-- ======= About us Start ======= -->
+
+  <main id="main">
+		<!-- ======= About Section ======= -->
+		{% for ab in aboutus %}
+		<section id="about" class="about landing-about">
+			
+		  <div class="container" data-aos="fade-up">
+            <div class="landing-about-card">
+			<div class="row gx-lg-5 gy-4 align-items-center">
+
+			  <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+				<div class="content">
+				  <h3>Who We Are</h3>
+				  <h2>{{ab.text1}}</h2>
+				  <p>
+					{{ab.text2}}
+				  </p>
+                  <div class="about-feature-grid">
+                    <div class="about-feature">
+                      <i class="bi bi-diagram-3"></i>
+                      Business software
+                    </div>
+                    <div class="about-feature">
+                      <i class="bi bi-puzzle"></i>
+                      Tally customization
+                    </div>
+                    <div class="about-feature">
+                      <i class="bi bi-cloud-check"></i>
+                      Cloud Setup
+                    </div>
+                  </div>
+				  <div class="text-center text-lg-start">
+					<a href="{% url 'aboutus' %}" class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+					  <span>Read More</span>
+					  <i class="bi bi-arrow-right"></i>
+					</a>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+                <div class="landing-about-media">
+				  {% if ab.img %}
+				    <img src="{{ ab.img.url }}" class="img-fluid" alt="{{ ab.imagalt|default:'Initiator Solutions about image' }}" title="{{ ab.imagalt|default:'Initiator Solutions about image' }}" loading="lazy" decoding="async">
+				  {% else %}
+				    {% include "web2/partials/no_image.html" with placeholder_class="no-image-hero" placeholder_label="No about image available" %}
+				  {% endif %}
+                  <div class="landing-about-badge">
+                    <i class="bi bi-check2-circle"></i>
+                    Business ready solutions
+                  </div>
+                </div>
+			  </div>
+
+			</div>
+            </div>
+		  </div>
+		  
+
+		</section><!-- End About Section -->
+
+		<!-- ======= Counts Section ======= -->
+		<section id="counts" class="counts">
+		  <div class="container" data-aos="fade-up">
+
+			<div class="row gy-4">
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-emoji-smile"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.client}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Happy Clients</p>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-journal-richtext" style="color: #ee6c20;"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.project}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Projects</p>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-headset" style="color: #15be56;"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.hrs}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Hours Of Support</p>
+				  </div>
+				</div>
+			  </div>
+
+			  <div class="col-lg-3 col-md-6">
+				<div class="count-box">
+				  <i class="bi bi-people" style="color: #bb0852;"></i>
+				  <div>
+					<span data-purecounter-start="0" data-purecounter-end="{{ab.emp}}" data-purecounter-duration="1" class="purecounter"></span>
+					<p>Hard Workers</p>
+				  </div>
+				</div>
+			  </div>
+
+			</div>
+
+		  </div>
+		  
+		</section><!-- End Counts Section -->
+		{% endfor %}
+
+  <!-- ======= About us END ======= -->
+
+
+
+<!-- ======= Product Data ======= -->
+  <section id="values" class="values landing-section-soft landing-products">
+    <div class="container" data-aos="fade-up">
+
+      <header class="section-header">
+        <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Our Products</h2>
+      </header>
+
+      <div class="row">
+        {% for i in product %}
+
+		<div class="col-lg-4 mt-4">
+          <div class="box border landing-card" data-aos="fade-up" data-aos-delay="200">
+            <a href="{{ i.get_absolute_url }}" title="{{ i.display_title }}">
+              {% if i.img %}
+                <img src="{{ i.img.url }}" class="img-fluid" alt="{{ i.display_title }}" title="{{ i.display_title }}" loading="lazy" decoding="async">
+              {% else %}
+                {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=i.display_title %}
+              {% endif %}
+            </a>
+            <h3><a href="{{ i.get_absolute_url }}" title="{{ i.display_title }}">{{ i.display_title }}</a></h3>
+            {% if i.short_description %}<p class="text-dark">{{i.short_description|striptags}}</p>{% endif %}
+            <div class="landing-card-actions">
+              <a href="{{ i.get_absolute_url }}" class="btn btn-primary btn-sm" title="{{ i.display_title }}">View Details</a>
+              <button type="button" class="btn btn-outline-primary btn-sm" title="Enquire Now" data-toggle="modal" data-target="#exampleModal">Enquire Now</button>
+            </div>
+			
+          </div>
+		  
+        </div>
+		
+
+        {% endfor %}
+      </div>
+
+  </section> <!-- ======= END Product Data ======= -->
+
+
+<!-- ======= Services Data ======= -->
+<section id="values" class="values landing-services">
+    <div class="container" data-aos="fade-up">
+
+      <header class="section-header">
+        <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Our Services</h2>
+      </header>
+
+      <div class="row">
+        {% for i in services %}
+
+		<div class="col-lg-4 mt-4">
+          <div class="box border landing-card" data-aos="fade-up" data-aos-delay="200">
+            <a href="{{ i.get_absolute_url }}" title="{{ i.display_title }}">
+              {% if i.img %}
+                <img src="{{i.img.url}}" class="img-fluid" alt="{{i.image_alt|default:i.display_title}}" title="{{i.image_alt|default:i.display_title}}" loading="lazy" decoding="async">
+              {% else %}
+                {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=i.display_title %}
+              {% endif %}
+            </a>
+            <h3><a href="{{ i.get_absolute_url }}" title="{{ i.display_title }}">{{i.display_title}}</a></h3>
+            {% if i.short_description %}<p class="text-dark">{{i.short_description|striptags}}</p>{% endif %}
+            <div class="landing-card-actions">
+              <a href="{{ i.get_absolute_url }}" class="btn btn-primary btn-sm" title="{{ i.display_title }}">View Details</a>
+              <button type="button" class="btn btn-outline-primary btn-sm" title="Enquire Now" data-toggle="modal" data-target="#exampleModal">Enquire Now</button>
+            </div>
+          
+          </div>
+		  
+        </div>
+		
+
+        {% endfor %}
+      </div>
+
+  </section> <!-- ======= END Services Data ======= -->
+
+  <!-- ======= Support Section ======= -->
+  <section id="support" class="landing-support">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2 style="font-size: 25px; letter-spacing: 1px; font-weight:760; margin: 0; color: #fff; text-transform: uppercase;">Support</h2>
+        <p></p>
+      </header>
+
+      <div class="row gy-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="support-box" data-aos="fade-up" data-aos-delay="100">
+            <i class="bi bi-headset"></i>
+            <h3>Tally Support</h3>
+            <p>Customization, reports, invoice format, TDL, backup and integration support.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="support-box" data-aos="fade-up" data-aos-delay="200">
+            <i class="bi bi-diagram-3"></i>
+            <h3>ERP Modules</h3>
+            <p>Business modules for stock, sales, approval, barcode and workflow control.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="support-box" data-aos="fade-up" data-aos-delay="300">
+            <i class="bi bi-cloud-check"></i>
+            <h3>Cloud Help</h3>
+            <p>Cloud access, remote working, server setup, backup and application hosting.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="support-box" data-aos="fade-up" data-aos-delay="400">
+            <i class="bi bi-window-sidebar"></i>
+            <h3>Website Care</h3>
+            <p>Website updates, forms, CRM/API enquiry flow, SEO basics and maintenance.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="button" class="landing-btn-outline d-inline-flex align-items-center justify-content-center" title="Enquire Now" data-toggle="modal" data-target="#exampleModal">
+          <i class="bi bi-send mr-2"></i>
+          <span>Get Support</span>
+        </button>
+      </div>
+    </div>
+  </section>
+	
+
+  <!-- ======= Team Section ======= -->
+  <section id="team" class="team">
+
+	<div class="container" data-aos="fade-up">
+
+	    <header class="section-header">
+			<h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Our Team</h2>
+		  </header>
+	
+
+	  <div class="row gy-4">
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <div class="social">
+				
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. Mohammed</h4>
+			  <span>Chief Executive Officer</span>
+			  <p>Mr. Mohammed Chief Executive Officer in Initiator Solutions </p>
+			</div>
+		  </div>
+		</div>
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <div class="social">
+				
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. Maddy</h4>
+			  <span>Product Manager</span>
+			  <p>Mr. Maddy Chief Product Manager for All  Customized Software in Initiator Solutions </p>			</div>
+		  </div>
+		</div>
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <div class="social">
+			
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. Raju</h4>
+			  <span>CTO</span>
+			  <p>Mr. Raju Senior Developer for all customized software in Initiator Solutions.</p>
+			</div>
+		  </div>
+		</div>
+
+		<div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+		  <div class="member">
+			<div class="member-img">
+			  <img src="{% static 'web2\assets\img\perosn.jpg' %}" class="img-fluid" alt="Initiator Team" title="Initiator Team" loading="lazy" decoding="async">
+			  <div class="social">
+			
+			  </div>
+			</div>
+			<div class="member-info">
+			  <h4>Mr. DK</h4>
+			  <span>Accountant</span>
+			  <p>Mr. DK Senior Accountant in Initiator Solutions.</p>			</div>
+		  </div>
+		</div>
+
+	  </div>
+
+	</div>
+
+  </section><!-- End Team Section -->
+
+
+
+
+  <!-- ======= Team Start ======= -->
+
+
+
+<!-- ======= Contact Us ======= -->
+
+<!-- ======= Contact Section ======= -->
+<section id="contact" class="contact landing-section-soft pt-0">
+
+	<div class="container" data-aos="fade-up">
+
+	  <header class="section-header">
+	   <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Contact Us</h2>
+		<p></p>
+	  </header>
+
+	  <div class="row gy-4">
+
+		<div class="col-lg-6">
+
+		  <div class="row gy-4">
+
+
+			{% for cont_lists in cont_list %}
+			<div class="col-md-6">
+			  <div class="info-box">
+				<i class="{{cont_lists.iconcode}}"></i>
+				<h3>{{cont_lists.title}}</h3>
+				<p>{{cont_lists.p1}}</p>
+				<p>{{cont_lists.p2}}</p>
+				<p>{{cont_lists.p3}}</p>
+			  </div>
+			</div>
+			  {% endfor %}
+
+		  </div>
+
+		</div>
+
+		<div class="col-lg-6">
+		  <div class="landing-contact-form landing-contact-panel">
+            <div class="contact-form-head">
+              <i class="bi bi-send"></i>
+              <div>
+                <h3>Send Your Requirement</h3>
+              </div>
+            </div>
+            <div class="contact-modal-list">
+              <span><i class="bi bi-check-circle"></i> One form for enquiry, contact and support</span>
+              <span><i class="bi bi-check-circle"></i> Quick callback for software and Tally needs</span>
+              <span><i class="bi bi-check-circle"></i> Email response with requirement next steps</span>
+            </div>
+            <div class="contact-modal-actions">
+              <button type="button" class="btn btn-primary" title="Open Enquiry Form" data-toggle="modal" data-target="#exampleModal">
+                <i class="bi bi-send mr-2"></i>Open Enquiry Form
+              </button>
+              <a href="tel:+918882595800" class="btn btn-outline-primary" title="Call Initiator Solutions">
+                <i class="bi bi-telephone mr-2"></i>Call Now
+              </a>
+            </div>
+		  </div>
+
+		</div>
+	  </div>
+		<br>
+		<br>
+	  
+		<!--I Frame Details Here Show all--->
+	<div class="col-md-12 container p-1 landing-map">
+
+	<iframe class="mb-4 mb-lg-0" title="INITIATOR SOLUTIONS"
+	src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.923177622704!2d77.33552571460267!3d28.572069493566687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cebc84d23bcff%3A0x18c6aa04618de1d!2sINITIATOR%20SOLUTIONS!5e0!3m2!1sen!2sin!4v1676552503138!5m2!1sen!2sin" frameborder="0" style="border:0; width: 100%; height: 384px;" allowfullscreen></iframe>
+
+
+
+
+	 
+	 </div> 
+
+	<!-- END I Frame Details Here Show all--->
+
+
+	  
+
+	</div>
+
+
+  </section><!-- End Contact Section -->
+
+
+<!-- ======= END Contact Us ======= -->
+
+
+
+
+
+  </main>
+
+ {% endblock %}

@@ -1,0 +1,145 @@
+{% extends "web2/wbase.html" %}
+{% block title %}{{ seo_title }}{% endblock %}
+{% block metadata %}
+<meta content="{{ seo_description }}" name="description">
+<meta content="{{ seo_keywords }}" name="keywords">
+{% endblock %}
+
+{% block css %}
+<style>
+  .server-error-card {
+    overflow: hidden;
+    border: 1px solid rgba(217, 70, 114, 0.20) !important;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(1, 41, 112, 0.11);
+    text-align: left;
+  }
+
+  .server-error-header {
+    padding: 24px 28px;
+    color: #fff;
+    background: linear-gradient(135deg, #9f1239, #4154f1);
+  }
+
+  .server-error-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 76px;
+    margin-bottom: 12px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    color: #9f1239;
+    background: #fff;
+    font-family: "Nunito", sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .server-error-header h2 {
+    margin: 0;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  .server-error-body {
+    padding: 26px 28px;
+  }
+
+  .server-error-details {
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .server-error-details li {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(1, 41, 112, 0.08);
+  }
+
+  .server-error-details strong {
+    min-width: 140px;
+    color: #0b1f4d;
+    font-family: "Nunito", sans-serif;
+    font-weight: 900;
+  }
+
+  .server-error-details span {
+    color: #34405c;
+    overflow-wrap: anywhere;
+  }
+
+  .server-error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .server-error-actions .btn {
+    border-radius: 8px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 9px 16px;
+  }
+
+  @media (max-width: 575.98px) {
+    .server-error-header,
+    .server-error-body {
+      padding: 22px 18px;
+    }
+
+    .server-error-details li {
+      display: block;
+    }
+
+    .server-error-details strong {
+      display: block;
+      min-width: 0;
+      margin-bottom: 4px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<br>
+<br><br>
+<hr style="border-top: 1px solid #000508;">
+
+<section class="values">
+  <div class="container" data-aos="fade-up">
+    <header class="section-header">
+      <h1 style="font-size: 25px; letter-spacing: 1px; font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Server Error</h1>
+      <p></p>
+    </header>
+    <div class="row justify-content-center">
+      <div class="col-lg-9 pb-3 pr-3">
+        <div class="server-error-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="server-error-header">
+            <span class="server-error-code">500</span>
+            <h2>The website could not complete this request.</h2>
+          </div>
+          <div class="server-error-body">
+            <p class="text-dark">This is a Django-side server error. Use the diagnostic ID below to find the matching entry in the application logs.</p>
+            <ul class="server-error-details">
+              <li><strong>Requested URL</strong><span>{{ requested_path }}</span></li>
+              <li><strong>Likely reason</strong><span>{{ public_reason }}</span></li>
+              <li><strong>Diagnostic ID</strong><span>{{ diagnostic_id }}</span></li>
+              <li><strong>Referrer</strong><span>{{ referrer }}</span></li>
+            </ul>
+            <div class="server-error-actions">
+              <a href="{% url 'index' %}" class="btn btn-primary btn-sm" title="Home">Home</a>
+              <a href="{% url 'contact' %}" class="btn btn-outline-primary btn-sm" title="Contact Us">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,998 @@
+{% extends "web2/wbase.html" %}
+{% block title %}{{ seo_title|default:"Our Portfolio" }}{% endblock %}
+{% block metadata %}
+<meta content="{{ seo_description }}" name="description">
+<meta content="{{ seo_keywords }}" name="keywords">
+{% endblock %}
+{% load static %}
+
+{% block css %}
+<style>
+  .portfolio-page {
+    color: #34405c;
+    padding-bottom: 56px;
+  }
+
+  .portfolio-page .section-header h2 {
+    color: #4154f1 !important;
+    font-family: "Poppins", sans-serif;
+    font-size: 25px;
+    font-weight: 760;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .portfolio-section {
+    padding: 58px 0 14px;
+  }
+
+  .portfolio-section-copy {
+    max-width: 780px;
+    margin: 10px auto 0;
+    color: #526070;
+    font-size: 16px;
+    line-height: 1.72;
+    text-align: center;
+  }
+
+  .portfolio-hero {
+    min-height: 510px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 86px 0 68px;
+    background: url("{% static 'web2/assets/img/hero-bg.png' %}") top center no-repeat;
+    background-size: cover;
+  }
+
+  .portfolio-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 8px 13px;
+    border: 1px solid rgba(65, 84, 241, 0.18);
+    border-radius: 8px;
+    color: #4154f1;
+    background: rgba(255, 255, 255, 0.82);
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(1, 41, 112, 0.08);
+  }
+
+  .portfolio-hero h1 {
+    max-width: 890px;
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.16;
+    margin: 0 0 18px;
+  }
+
+  .portfolio-hero p {
+    max-width: 790px;
+    color: #444444;
+    font-size: 17px;
+    line-height: 1.72;
+    margin: 0 0 28px;
+  }
+
+  .portfolio-hero-image {
+    text-align: right;
+  }
+
+  .portfolio-hero-image img {
+    max-height: 390px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    padding: 0 !important;
+    filter: drop-shadow(0 18px 26px rgba(1, 41, 112, 0.16));
+  }
+
+  .portfolio-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .portfolio-actions .btn,
+  .portfolio-cta .btn {
+    border-radius: 8px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 10px 18px;
+  }
+
+  .portfolio-primary-btn {
+    background: #4154f1;
+    border-color: #4154f1;
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(65, 84, 241, 0.28);
+  }
+
+  .portfolio-primary-btn:hover {
+    color: #fff;
+    background: #5969f3;
+  }
+
+  .portfolio-ghost-btn {
+    color: #012970;
+    border-color: rgba(65, 84, 241, 0.42);
+    background: rgba(255, 255, 255, 0.76);
+  }
+
+  .portfolio-ghost-btn:hover {
+    color: #fff;
+    background: #4154f1;
+  }
+
+  .portfolio-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    max-width: 920px;
+  }
+
+  .portfolio-metric {
+    padding: 18px;
+    border: 1px solid rgba(65, 84, 241, 0.16);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 12px 28px rgba(1, 41, 112, 0.08);
+  }
+
+  .portfolio-metric strong {
+    display: block;
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .portfolio-metric span {
+    display: block;
+    color: #526070;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    margin-top: 8px;
+  }
+
+  .portfolio-page-nav {
+    position: relative;
+    z-index: 2;
+    margin-top: -28px;
+  }
+
+  .portfolio-page-nav .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid rgba(65, 84, 241, 0.16);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(1, 41, 112, 0.14);
+  }
+
+  .portfolio-page-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 13px;
+    border-radius: 8px;
+    color: #012970;
+    background: #f6f9ff;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .portfolio-page-nav a:hover {
+    color: #fff;
+    background: #4154f1;
+  }
+
+  .portfolio-featured {
+    --feature-accent: #315efb;
+    --feature-accent-2: #13b8a7;
+    overflow: hidden;
+    border: 1px solid rgba(65, 84, 241, 0.18);
+    border-radius: 8px;
+    background: linear-gradient(160deg, #ffffff 0%, #f4f8ff 100%);
+    box-shadow: 0 18px 42px rgba(1, 41, 112, 0.12);
+  }
+
+  .portfolio-featured-media {
+    height: 100%;
+    min-height: 360px;
+    background: #fff;
+  }
+
+  .portfolio-featured-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0 !important;
+  }
+
+  .portfolio-featured-fallback {
+    height: 100%;
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--feature-accent);
+    font-size: 64px;
+    background: linear-gradient(135deg, rgba(65, 84, 241, 0.10), rgba(19, 184, 167, 0.10));
+  }
+
+  .portfolio-featured-content {
+    padding: 34px;
+    text-align: left;
+  }
+
+  .portfolio-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 14px;
+    padding: 7px 13px;
+    border: 1px solid rgba(65, 84, 241, 0.20);
+    border-radius: 8px;
+    color: #4154f1;
+    background: #fff;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .portfolio-featured-content h3 {
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0 0 14px;
+  }
+
+  .portfolio-featured-content p {
+    color: #526070;
+    font-size: 16px;
+    line-height: 1.72;
+    margin: 0 0 14px;
+  }
+
+  .portfolio-outcome {
+    margin: 18px 0;
+    padding: 16px;
+    border-left: 4px solid var(--feature-accent);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.74);
+    color: #34405c;
+    font-weight: 700;
+  }
+
+  .portfolio-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 16px;
+  }
+
+  .portfolio-tag-list span {
+    padding: 8px 11px;
+    border: 1px solid rgba(65, 84, 241, 0.18);
+    border-radius: 8px;
+    color: #012970;
+    background: #fff;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .portfolio-item {
+    margin-bottom: 28px;
+  }
+
+  .portfolio-work-card {
+    --work-accent: #315efb;
+    --work-accent-2: #13b8a7;
+    --work-soft: #f4f8ff;
+    --work-border: rgba(49, 94, 251, 0.22);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--work-border);
+    border-radius: 8px;
+    background: linear-gradient(160deg, #ffffff 0%, var(--work-soft) 100%);
+    box-shadow: 0 16px 36px rgba(1, 41, 112, 0.10);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .portfolio-item:nth-child(3n+2) .portfolio-work-card {
+    --work-accent: #0f9f6e;
+    --work-accent-2: #f2a51a;
+    --work-soft: #f4fbf7;
+    --work-border: rgba(15, 159, 110, 0.24);
+  }
+
+  .portfolio-item:nth-child(3n+3) .portfolio-work-card {
+    --work-accent: #d94672;
+    --work-accent-2: #ff8a3d;
+    --work-soft: #fff7f3;
+    --work-border: rgba(217, 70, 114, 0.22);
+  }
+
+  .portfolio-work-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 22px 44px rgba(1, 41, 112, 0.16);
+  }
+
+  .portfolio-work-image {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--work-border);
+    background: #fff;
+  }
+
+  .portfolio-work-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0 !important;
+    transition: transform 0.45s ease;
+  }
+
+  .portfolio-work-card:hover .portfolio-work-image img {
+    transform: scale(1.04);
+  }
+
+  .portfolio-work-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--work-accent);
+    font-size: 54px;
+    background: linear-gradient(135deg, rgba(65, 84, 241, 0.10), rgba(19, 184, 167, 0.10));
+  }
+
+  .portfolio-work-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    text-align: left;
+  }
+
+  .portfolio-work-label {
+    align-self: flex-start;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: var(--work-accent);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--work-border);
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .portfolio-work-body h3 {
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.35;
+    margin: 0 0 12px;
+    text-align: left;
+  }
+
+  .portfolio-work-body p {
+    color: #526070;
+    font-size: 15px;
+    line-height: 1.62;
+    margin: 0 0 12px;
+  }
+
+  .portfolio-work-result {
+    margin-top: auto;
+    padding-top: 14px;
+    color: #34405c;
+    border-top: 1px solid rgba(1, 41, 112, 0.08);
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .portfolio-card,
+  .portfolio-process-step,
+  .portfolio-faq-item,
+  .portfolio-proof-card {
+    height: 100%;
+    padding: 24px;
+    border: 1px solid rgba(65, 84, 241, 0.16);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(1, 41, 112, 0.08);
+    text-align: left;
+  }
+
+  .portfolio-card i,
+  .portfolio-process-step i,
+  .portfolio-proof-card i {
+    color: #4154f1;
+    font-size: 31px;
+    line-height: 1;
+  }
+
+  .portfolio-card h4,
+  .portfolio-process-step h4,
+  .portfolio-faq-item h4,
+  .portfolio-proof-card h4 {
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    margin: 14px 0 8px;
+  }
+
+  .portfolio-card p,
+  .portfolio-process-step p,
+  .portfolio-faq-item p,
+  .portfolio-proof-card p {
+    color: #526070;
+    font-size: 15px;
+    line-height: 1.62;
+    margin: 0;
+  }
+
+  .portfolio-process-step {
+    position: relative;
+    border-color: rgba(15, 159, 110, 0.20);
+  }
+
+  .portfolio-step-number {
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    color: rgba(65, 84, 241, 0.14);
+    font-family: "Poppins", sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .portfolio-band {
+    margin: 44px 0 0;
+    padding: 36px 0;
+    background: #f6f9ff;
+  }
+
+  .portfolio-industries {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .portfolio-industry {
+    min-height: 118px;
+    padding: 20px;
+    border: 1px solid rgba(65, 84, 241, 0.16);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(1, 41, 112, 0.07);
+    text-align: left;
+  }
+
+  .portfolio-industry i {
+    color: #4154f1;
+    font-size: 26px;
+  }
+
+  .portfolio-industry span {
+    display: block;
+    color: #012970;
+    font-family: "Nunito", sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    margin-top: 13px;
+  }
+
+  .portfolio-tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 26px;
+  }
+
+  .portfolio-tag-cloud span {
+    padding: 10px 14px;
+    border: 1px solid rgba(65, 84, 241, 0.18);
+    border-radius: 8px;
+    color: #012970;
+    background: #fff;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 8px 22px rgba(1, 41, 112, 0.07);
+  }
+
+  .portfolio-proof-card {
+    border-top: 4px solid #4154f1;
+  }
+
+  .portfolio-proof-card strong {
+    display: block;
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+    margin: 12px 0 8px;
+  }
+
+  .portfolio-cta {
+    margin-top: 42px;
+    padding: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #012970, #4154f1);
+    color: #fff;
+    text-align: left;
+  }
+
+  .portfolio-cta h3 {
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    margin: 0 0 10px;
+  }
+
+  .portfolio-cta p {
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .portfolio-cta .btn {
+    color: #012970;
+    background: #fff;
+    border-color: #fff;
+  }
+
+  @media (max-width: 991.98px) {
+    .portfolio-hero {
+      min-height: auto;
+      padding: 62px 0 52px;
+    }
+
+    .portfolio-hero h1 {
+      font-size: 38px;
+    }
+
+    .portfolio-metrics,
+    .portfolio-industries {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .portfolio-hero-image {
+      margin-top: 34px;
+      text-align: center;
+    }
+
+    .portfolio-featured-media,
+    .portfolio-featured-fallback {
+      min-height: 280px;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .portfolio-hero h1 {
+      font-size: 31px;
+    }
+
+    .portfolio-metrics,
+    .portfolio-industries {
+      grid-template-columns: 1fr;
+    }
+
+    .portfolio-page-nav .container {
+      padding: 12px;
+    }
+
+    .portfolio-featured-content,
+    .portfolio-cta {
+      padding: 26px 20px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<br>
+<br><br>
+<hr style="border-top: 2px solid #000508;">
+
+<main class="portfolio-page">
+  <section class="portfolio-hero">
+    <div class="container" data-aos="fade-up">
+      <div class="row align-items-center">
+        <div class="col-lg-6 d-flex flex-column justify-content-center">
+          <span class="portfolio-hero-eyebrow"><i class="bi bi-stars"></i> Initiator Solutions Portfolio</span>
+          <h1>Business software, Tally integrations and automation systems built for real operations.</h1>
+          <p>Explore selected work across Tally customization, accounting software integration, ERP modules, web portals, barcode workflows, approval systems and digital business tools.</p>
+          <div class="portfolio-actions">
+            <a href="#selected-work" class="btn portfolio-primary-btn">View Portfolio</a>
+            <a href="#process" class="btn portfolio-ghost-btn">Our Process</a>
+            <button type="button" class="btn portfolio-ghost-btn" data-toggle="modal" data-target="#exampleModal">Start Project</button>
+          </div>
+          <div class="portfolio-metrics">
+            <div class="portfolio-metric">
+              <strong>{{ portfolio_items|length }}+</strong>
+              <span>Featured solutions</span>
+            </div>
+            <div class="portfolio-metric">
+              <strong>{{ portfolio_stats.client|default:"250" }}+</strong>
+              <span>Happy clients</span>
+            </div>
+            <div class="portfolio-metric">
+              <strong>{{ portfolio_stats.project|default:"450" }}+</strong>
+              <span>Projects delivered</span>
+            </div>
+            <div class="portfolio-metric">
+              <strong>A-Z</strong>
+              <span>Study to support</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 portfolio-hero-image" data-aos="zoom-out" data-aos-delay="200">
+          {% if landing_banner and landing_banner.img %}
+          <img src="{{ landing_banner.img.url }}" class="img-fluid" alt="{{ landing_banner.imagalt|default:'Initiator Solutions portfolio banner' }}" title="{{ landing_banner.imagalt|default:'Initiator Solutions portfolio banner' }}">
+          {% else %}
+          {% include "web2/partials/no_image.html" with placeholder_class="no-image-hero" placeholder_label="No portfolio banner image available" %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="portfolio-page-nav" aria-label="Portfolio page sections">
+    <div class="container">
+      <a href="#selected-work"><i class="bi bi-grid-3x3-gap"></i> Work</a>
+      <a href="#capabilities"><i class="bi bi-tools"></i> Capabilities</a>
+      <a href="#process"><i class="bi bi-diagram-3"></i> Process</a>
+      <a href="#industries"><i class="bi bi-buildings"></i> Industries</a>
+      <a href="#faq"><i class="bi bi-question-circle"></i> FAQs</a>
+      <a href="#contact-portfolio"><i class="bi bi-send"></i> Enquiry</a>
+    </div>
+  </nav>
+
+  {% if portfolio_items %}
+  {% with item=portfolio_items.0 %}
+  <section id="selected-work" class="portfolio-section">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2>FEATURED CASE STUDY</h2>
+        <p></p>
+      </header>
+      <p class="portfolio-section-copy">A closer look at one practical project from our portfolio.</p>
+
+      <div class="portfolio-featured mt-4">
+        <div class="row no-gutters align-items-stretch">
+          <div class="col-lg-6">
+            <div class="portfolio-featured-media">
+              {% if item.project.img %}
+              <img src="{{ item.project.img.url }}" alt="{{ item.project.name }}" title="{{ item.project.name }}">
+              {% else %}
+              {% include "web2/partials/no_image.html" with placeholder_class="no-image-detail" placeholder_label=item.project.name %}
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="portfolio-featured-content">
+              <span class="portfolio-badge"><i class="bi bi-award"></i> {{ item.category }}</span>
+              <h3>{{ item.project.name }}</h3>
+              <p>{{ item.summary }}</p>
+              <div class="portfolio-outcome">{{ item.outcome }}</div>
+              <div class="portfolio-tag-list">
+                {% for tag in item.tags %}
+                <span>{{ tag }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endwith %}
+  {% endif %}
+
+  <section class="portfolio-section">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2>SELECTED WORK</h2>
+        <p></p>
+      </header>
+      <p class="portfolio-section-copy">Delivered business tools and integrations presented with practical outcomes.</p>
+
+      <div class="row mt-4">
+        {% for item in portfolio_items %}
+        <div class="col-lg-4 col-md-6 portfolio-item">
+          <article class="portfolio-work-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="portfolio-work-image">
+              {% if item.project.img %}
+              <img src="{{ item.project.img.url }}" alt="{{ item.project.name }}" title="{{ item.project.name }}" loading="lazy" decoding="async">
+              {% else %}
+              {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=item.project.name %}
+              {% endif %}
+            </div>
+            <div class="portfolio-work-body">
+              <span class="portfolio-work-label">{{ item.category }}</span>
+              <h3>{{ item.project.name }}</h3>
+              <p>{{ item.summary }}</p>
+              <div class="portfolio-tag-list">
+                {% for tag in item.tags %}
+                <span>{{ tag }}</span>
+                {% endfor %}
+              </div>
+              <div class="portfolio-work-result">{{ item.outcome }}</div>
+            </div>
+          </article>
+        </div>
+        {% empty %}
+        <div class="col-lg-12">
+          <div class="portfolio-card">
+            <i class="bi bi-folder2-open"></i>
+            <h4>Portfolio records will appear here</h4>
+            <p>Add project name and image from admin to show work on this page.</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities" class="portfolio-section">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2>CAPABILITIES</h2>
+        <p></p>
+      </header>
+      <p class="portfolio-section-copy">Each solution is shaped around accounting flow, operations, reporting and the people who use it every day.</p>
+
+      <div class="row mt-4">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="portfolio-card">
+            <i class="bi bi-receipt"></i>
+            <h4>Tally Customization</h4>
+            <p>Invoice formats, vouchers, ledgers, GST reports, controls and automation for Tally Prime.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="portfolio-card">
+            <i class="bi bi-arrow-left-right"></i>
+            <h4>Accounting Integration</h4>
+            <p>Order, inventory, customer, payment and accounting data connected into smoother workflows.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="portfolio-card">
+            <i class="bi bi-diagram-3"></i>
+            <h4>ERP Modules</h4>
+            <p>Sales, purchase, stock, production, garment, approval and role-based business modules.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="portfolio-card">
+            <i class="bi bi-window-stack"></i>
+            <h4>Websites and Portals</h4>
+            <p>Business websites, portals, dashboards, customer panels and admin management systems.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="portfolio-card">
+            <i class="bi bi-upc-scan"></i>
+            <h4>Barcode Workflows</h4>
+            <p>Barcode, label printing, item tracking and inventory movement support for operations.</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="portfolio-card">
+            <i class="bi bi-graph-up-arrow"></i>
+            <h4>Digital Growth</h4>
+            <p>SEO, digital marketing, graphics and website improvement for stronger online presence.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="portfolio-band">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2>DELIVERY PROCESS</h2>
+        <p></p>
+      </header>
+      <p class="portfolio-section-copy">A clear delivery path keeps every project practical, measurable and easy to maintain.</p>
+
+      <div class="row mt-4">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-process-step">
+            <span class="portfolio-step-number">01</span>
+            <i class="bi bi-search"></i>
+            <h4>Requirement Study</h4>
+            <p>We understand current process, documents, data, users and business pain points.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-process-step">
+            <span class="portfolio-step-number">02</span>
+            <i class="bi bi-layout-text-window"></i>
+            <h4>Solution Design</h4>
+            <p>We plan screens, reports, controls, roles and integrations before development.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-process-step">
+            <span class="portfolio-step-number">03</span>
+            <i class="bi bi-code-slash"></i>
+            <h4>Build and Test</h4>
+            <p>We develop, connect, test and refine the solution with real business cases.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-process-step">
+            <span class="portfolio-step-number">04</span>
+            <i class="bi bi-headset"></i>
+            <h4>Training and Support</h4>
+            <p>We help users adopt the system and continue support after launch.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="industries" class="portfolio-section">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2>INDUSTRIES AND STACK</h2>
+        <p></p>
+      </header>
+      <p class="portfolio-section-copy">Portfolio work covers accounting, trading, manufacturing, retail, services and digital operations.</p>
+
+      <div class="portfolio-industries">
+        <div class="portfolio-industry"><i class="bi bi-shop"></i><span>Retail and Trading</span></div>
+        <div class="portfolio-industry"><i class="bi bi-box-seam"></i><span>Inventory and Stock</span></div>
+        <div class="portfolio-industry"><i class="bi bi-buildings"></i><span>Manufacturing</span></div>
+        <div class="portfolio-industry"><i class="bi bi-person-workspace"></i><span>Service Businesses</span></div>
+        <div class="portfolio-industry"><i class="bi bi-cart-check"></i><span>E-Commerce</span></div>
+        <div class="portfolio-industry"><i class="bi bi-cash-coin"></i><span>Accounting Teams</span></div>
+        <div class="portfolio-industry"><i class="bi bi-phone"></i><span>Mobile Workflows</span></div>
+        <div class="portfolio-industry"><i class="bi bi-cloud-check"></i><span>Cloud Operations</span></div>
+      </div>
+
+      <div class="portfolio-tag-cloud">
+        <span>Tally Prime</span>
+        <span>Busy</span>
+        <span>SAP</span>
+        <span>Zoho</span>
+        <span>ERP</span>
+        <span>CRM</span>
+        <span>E-Commerce</span>
+        <span>Barcode</span>
+        <span>Approval System</span>
+        <span>Reporting</span>
+        <span>Cloud</span>
+        <span>Mobile Apps</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio-section">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2>PROOF POINTS</h2>
+        <p></p>
+      </header>
+      <p class="portfolio-section-copy">The same team supports planning, implementation and improvement after delivery.</p>
+
+      <div class="row mt-4">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-proof-card">
+            <i class="bi bi-emoji-smile"></i>
+            <strong>{{ portfolio_stats.client|default:"250" }}+</strong>
+            <p>Happy clients supported across business software and accounting workflows.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-proof-card">
+            <i class="bi bi-journal-richtext"></i>
+            <strong>{{ portfolio_stats.project|default:"450" }}+</strong>
+            <p>Projects, modules and implementation assignments handled by the team.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-proof-card">
+            <i class="bi bi-headset"></i>
+            <strong>{{ portfolio_stats.hrs|default:"12000" }}+</strong>
+            <p>Hours of support across setup, changes, training and maintenance.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="portfolio-proof-card">
+            <i class="bi bi-people"></i>
+            <strong>{{ portfolio_stats.emp|default:"18" }}+</strong>
+            <p>Hardworking specialists across development, customization and support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="portfolio-section">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h2>COMMON QUESTIONS</h2>
+        <p></p>
+      </header>
+      <p class="portfolio-section-copy">Quick answers for businesses planning a similar software or integration project.</p>
+
+      <div class="row mt-4">
+        <div class="col-lg-6 mb-4">
+          <div class="portfolio-faq-item">
+            <h4>Can you customize Tally as per our invoice and report format?</h4>
+            <p>Yes. We can customize invoice layouts, reports, vouchers and controls based on your business requirements.</p>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="portfolio-faq-item">
+            <h4>Can you connect our website or e-commerce system with accounting software?</h4>
+            <p>Yes. We can plan and build integrations for orders, inventory, customers and accounting entries.</p>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="portfolio-faq-item">
+            <h4>Do you handle custom ERP or module development?</h4>
+            <p>Yes. We build business modules for approvals, stock, sales, purchase, barcode and team workflows.</p>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="portfolio-faq-item">
+            <h4>Do you provide support after implementation?</h4>
+            <p>Yes. We support setup, training, improvements and ongoing changes after project delivery.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="contact-portfolio" class="portfolio-cta">
+        <div class="row align-items-center">
+          <div class="col-lg-8 mb-3 mb-lg-0">
+            <h3>Ready to build a similar business solution?</h3>
+            <p>Share your current process, accounting flow or software requirement and we will shape it into a practical project plan.</p>
+          </div>
+          <div class="col-lg-4 text-lg-right">
+            <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

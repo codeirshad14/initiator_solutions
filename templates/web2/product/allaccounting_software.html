@@ -1,0 +1,85 @@
+{% extends "web2/wbase.html" %}
+{% block title %}All Accounting Software{% endblock %} 
+
+{% block metadata %}
+<meta content="We Are Software Development & All Accounting Software Solutions company INITIATOR SOLUTIONS is one of the best in Website Development, Web Design, E-Commerce Development, Web Portal Development , CRM Software Development, LML Module, Distributor Module Development, Online Accounting or Invoicing Module Development , Digital Marketing, Graphics Designing, Mobile Application Development Android, IOS & All Accounting Software Integration Like Tally Customization, Tally Integration, All Tally customized Vertical Solution, SAP ,Microsoft & other Accounting software Integration etc. INITIATOR SOLUTIONS is also Authorized Solution Partner In -- Tally, Busy, SAP, Zoho Etc." name="description">
+<meta content="All Accounting Software,Tally Prime,All Accounting Software,Accounting Software Company in noida,Tally Partner in Noida,Busy Partner in Delhi Ncr,Zoho  Authorized Partner"name="keywords">
+{% endblock %}
+
+{% load static %}
+
+
+
+ {% block content %}
+
+<br>
+<br><br>
+<hr style="border-top: 1px solid #000508;">
+<!-- ======= Values Section =======  rgba(127, 137, 161, 0.01);-->
+
+
+<section id="values" class="values" >
+
+
+    <div class="container" data-aos="fade-up">
+
+      <header class="section-header">
+        <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">All Accounting Software</h2>
+        <p></p>
+      </header>
+
+
+
+      <div class="row">
+
+        {% for all_acc in allacct_list %}
+
+        <div class="col-lg-4 pb-3 pr-3">
+          <div class="box border" data-aos="fade-up" data-aos-delay="200">
+            {% if all_acc.img %}
+              <img src="{{ all_acc.img.url }}" class="img-fluid" alt="{{ all_acc.name }}" title="{{ all_acc.name }}">
+            {% else %}
+              {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=all_acc.name %}
+            {% endif %}
+            <h3>{{all_acc.name}}</h3>
+            <p>{{all_acc.p1}}</p>
+            <p>{{all_acc.p2}}</p>
+            <p>{{all_acc.p3}}</p>
+            <p>{{all_acc.p4}}</p>
+            <p>{{all_acc.p5}}</p>
+          </div>
+        </div>
+        
+        {% endfor %}
+
+
+       <!-- 
+       <div class="col-lg-4 mt-4 mt-lg-0">
+          <div class="box" data-aos="fade-up" data-aos-delay="400">
+            <img src="{% static 'web2\assets\img\values-2.png'%}" class="img-fluid" alt="">
+            <h3>Voluptatem voluptatum alias</h3>
+            <p>Repudiandae amet nihil natus in distinctio suscipit id. Doloremque ducimus ea sit non.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+          <div class="box" data-aos="fade-up" data-aos-delay="600">
+            <img src="{% static 'web2\assets\img\values-3.png' %}" class="img-fluid" alt="">
+            <h3>Fugit cupiditate alias nobis.</h3>
+            <p>Quam rem vitae est autem molestias explicabo debitis sint. Vero aliquid quidem commodi.</p>
+          </div>
+        </div>-->
+
+      </div>      
+
+
+    </div>
+
+
+  </section><!-- End Values Section -->
+
+
+
+
+
+  {% endblock %}

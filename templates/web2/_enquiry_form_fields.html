@@ -1,0 +1,44 @@
+{% firstof enquiry_id_prefix "modal" as enquiry_prefix %}
+{% firstof enquiry_half_class "col-md-6 compact-field" as half_class %}
+{% firstof enquiry_full_class "col-md-12 compact-field" as full_class %}
+{% firstof enquiry_message_class full_class as message_class %}
+{% firstof enquiry_message_rows "3" as message_rows %}
+{% firstof enquiry_button_wrapper_class "col-md-12 text-center" as button_wrapper_class %}
+{% firstof enquiry_button_class "btn enquiry-submit-btn" as button_class %}
+{% firstof enquiry_submit_label "Send Message" as submit_label %}
+
+<div class="row">
+  <div class="{{ half_class }}">
+    <label for="{{ enquiry_prefix }}-contact-name">Your Name</label>
+    <input id="{{ enquiry_prefix }}-contact-name" type="text" name="name" class="form-control" placeholder="Your Name" required>
+  </div>
+
+  <div class="{{ half_class }}">
+    <label for="{{ enquiry_prefix }}-contact-company">Company Name</label>
+    <input id="{{ enquiry_prefix }}-contact-company" type="text" name="cmpname" class="form-control" placeholder="Company Name" required>
+  </div>
+
+  <div class="{{ half_class }}">
+    <label for="{{ enquiry_prefix }}-contact-mobile">Mobile Number</label>
+    <input id="{{ enquiry_prefix }}-contact-mobile" type="text" name="mob" class="form-control" placeholder="Mobile Number" required>
+  </div>
+
+  <div class="{{ half_class }}">
+    <label for="{{ enquiry_prefix }}-contact-email">Email Address</label>
+    <input id="{{ enquiry_prefix }}-contact-email" type="email" class="form-control" name="email" placeholder="Email Address" required>
+  </div>
+
+  <div class="{{ full_class }}">
+    <label for="{{ enquiry_prefix }}-contact-subject">Subject</label>
+    <input id="{{ enquiry_prefix }}-contact-subject" type="text" class="form-control" name="subject" placeholder="Subject" required>
+  </div>
+
+  <div class="{{ message_class }}">
+    <label for="{{ enquiry_prefix }}-contact-message">Message</label>
+    <textarea id="{{ enquiry_prefix }}-contact-message" class="form-control" name="message" rows="{{ message_rows }}" placeholder="Write your requirement here" required></textarea>
+  </div>
+
+  <div class="{{ button_wrapper_class }}">
+    <button type="submit" class="{{ button_class }}"><i class="bi bi-send"></i> {{ submit_label }}</button>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+.rich-text-editor {
+  border: 1px solid #b9c6e3;
+  border-radius: 8px;
+  max-width: 960px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(1, 41, 112, 0.08);
+}
+
+.rich-text-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #dce4f5;
+  background: #f6f8fc;
+}
+
+.rich-text-toolbar button,
+.rich-text-toolbar select,
+.rich-text-toolbar input[type="color"] {
+  min-height: 32px;
+}
+
+.rich-text-toolbar button {
+  min-width: 36px;
+  padding: 5px 9px;
+  border: 1px solid #c5d0e6;
+  border-radius: 6px;
+  background: #fff;
+  color: #10234d;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rich-text-toolbar button:hover {
+  border-color: #4154f1;
+  background: #edf2ff;
+  color: #2438c9;
+}
+
+.rich-text-toolbar select {
+  border: 1px solid #c5d0e6;
+  border-radius: 6px;
+  background: #fff;
+  color: #10234d;
+  font-weight: 600;
+}
+
+.rich-text-toolbar input[type="color"] {
+  width: 40px;
+  padding: 2px;
+  border: 1px solid #c5d0e6;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.rich-text-separator {
+  width: 1px;
+  height: 28px;
+  margin: 0 2px;
+  background: #d5dded;
+}
+
+.rich-text-canvas {
+  min-height: 360px;
+  padding: 18px;
+  color: #111;
+  line-height: 1.6;
+  outline: none;
+}
+
+.rich-text-canvas:focus {
+  box-shadow: inset 0 0 0 2px #79aec8;
+}

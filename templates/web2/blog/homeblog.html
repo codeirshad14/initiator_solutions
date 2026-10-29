@@ -1,0 +1,143 @@
+{% extends "web2/wbase.html" %}
+{% block title %}{{ seo_title|default:"All Blog" }}{% endblock %}
+{% block metadata %}
+<meta content="{{ seo_description }}" name="description">
+<meta content="{{ seo_keywords }}" name="keywords">
+{% endblock %}
+
+{% load static %}
+
+{% block css %}
+{% include "web2/blog/_blog_styles.html" %}
+{% endblock %}
+
+{% block content %}
+
+<main id="main" class="blog-modern">
+  <section class="breadcrumbs">
+    <div class="container">
+      <ol>
+        <li><a href="{% url 'index' %}" title="Home">Home</a></li>
+        <li>Blog</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="blog-hero">
+    <div class="container" data-aos="fade-up">
+      <span class="blog-hero-eyebrow"><i class="bi bi-journal-richtext"></i> Initiator Solutions Blog</span>
+      <h1>Ideas for software, Tally, ERP, cloud and digital business growth.</h1>
+      <p>Read practical articles about accounting software, Tally customization, website development, ERP modules, cloud access, SEO and business automation.</p>
+
+      <form class="blog-hero-search" method="get" action="{% url 'homeblog' %}">
+        <input type="text" name="keyword" value="{{ active_keyword }}" placeholder="Search blog topics, Tally, ERP, SEO..." required>
+        <button type="submit"><i class="bi bi-search"></i> Search</button>
+      </form>
+
+      <div class="blog-hero-metrics">
+        <div class="blog-hero-metric">
+          <strong>{{ blog_count }}</strong>
+          <span>{% if active_keyword %}Matched posts{% else %}Published posts{% endif %}</span>
+        </div>
+        <div class="blog-hero-metric">
+          <strong>{{ categories|length }}</strong>
+          <span>Blog categories</span>
+        </div>
+        <div class="blog-hero-metric">
+          <strong>{{ all_tags|length }}</strong>
+          <span>Popular tags</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-content-section">
+    <div class="container" data-aos="fade-up">
+
+      {% if active_keyword %}
+      <div class="alert alert-light border mb-4" role="status">
+        Showing {{ blog_count }} result{% if blog_count != 1 %}s{% endif %} for <strong>{{ active_keyword }}</strong>.
+        <a href="{% url 'homeblog' %}" title="All Blog">Clear search</a>
+      </div>
+      {% endif %}
+
+      {% if featured_blog %}
+      <article class="blog-featured-card">
+        <div class="row no-gutters align-items-stretch">
+          <div class="col-lg-6">
+            <div class="blog-featured-media">
+              {% if featured_blog.image %}
+              <img src="{{ featured_blog.image.url }}" alt="{{ featured_blog.alt|default:featured_blog.title }}" title="{{ featured_blog.alt|default:featured_blog.title }}">
+              {% else %}
+              {% include "web2/partials/no_image.html" with placeholder_class="no-image-hero" placeholder_label=featured_blog.title %}
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="blog-featured-body">
+              <span class="blog-card-label"><i class="bi bi-stars"></i> Featured Article</span>
+              <h2 class="blog-card-title"><a href="{{ featured_blog.get_absolute_url }}" title="{{ featured_blog.title }}">{{ featured_blog.title }}</a></h2>
+              <div class="blog-meta">
+                <span><i class="bi bi-person"></i> {{ featured_blog.author_name }}</span>
+                <span><i class="bi bi-clock"></i> <time datetime="{{ featured_blog.pub_date|date:'Y-m-d' }}">{{ featured_blog.pub_date|date:"M d, Y" }}</time></span>
+                <span><i class="bi bi-folder2"></i> {{ featured_blog.type }}</span>
+              </div>
+              <p class="blog-excerpt">{{ featured_blog.summary }}</p>
+              <a class="blog-read-more" href="{{ featured_blog.get_absolute_url }}" title="{{ featured_blog.title }}">Read Article <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </article>
+      {% endif %}
+
+      <div class="row">
+        <div class="col-lg-8">
+          <header class="section-header text-left mb-4">
+            <h2>{% if active_keyword %}SEARCH RESULTS{% else %}LATEST ARTICLES{% endif %}</h2>
+            <p></p>
+          </header>
+
+          <div class="row">
+            {% for bl in blog %}
+            <div class="col-md-6 mb-4">
+              <article class="blog-post-card">
+                <div class="blog-post-media">
+                  {% if bl.image %}
+                  <img src="{{ bl.image.url }}" alt="{{ bl.alt|default:bl.title }}" title="{{ bl.alt|default:bl.title }}" loading="lazy" decoding="async">
+                  {% else %}
+                  {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=bl.title %}
+                  {% endif %}
+                </div>
+                <div class="blog-post-body">
+                  <span class="blog-category-pill"><i class="bi bi-folder2"></i> {{ bl.type }}</span>
+                  <h2 class="blog-card-title"><a href="{{ bl.get_absolute_url }}" title="{{ bl.title }}">{{ bl.title }}</a></h2>
+                  <div class="blog-meta">
+                    <span><i class="bi bi-person"></i> {{ bl.author_name }}</span>
+                    <span><i class="bi bi-clock"></i> <time datetime="{{ bl.pub_date|date:'Y-m-d' }}">{{ bl.pub_date|date:"M d, Y" }}</time></span>
+                  </div>
+                  <p class="blog-excerpt">{{ bl.summary }}</p>
+                  <a class="blog-read-more" href="{{ bl.get_absolute_url }}" title="{{ bl.title }}">Read More <i class="bi bi-arrow-right"></i></a>
+                </div>
+              </article>
+            </div>
+            {% empty %}
+            <div class="col-lg-12">
+              <div class="blog-empty-card p-4">
+                <h3 class="blog-card-title">No blog found</h3>
+                <p class="blog-excerpt">Try another keyword or view all blog posts.</p>
+                <a class="blog-read-more" href="{% url 'homeblog' %}" title="All Blog">View All Blog</a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          {% include "web2/blog/_blog_sidebar.html" %}
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

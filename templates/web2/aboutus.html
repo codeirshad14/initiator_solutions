@@ -1,0 +1,315 @@
+{% extends "web2/wbase.html" %}
+{% block title %}{{ seo_title|default:"Who We Are" }}{% endblock %}
+
+{% block metadata %}
+<meta content="{{ seo_description }}" name="description">
+<meta content="{{ seo_keywords }}" name="keywords">
+{% endblock %}
+
+{% load static seo_tags %}
+
+{% block css %}
+<style>
+  .about-page {
+    padding-bottom: 44px;
+  }
+
+  .about-page .section-header h1,
+  .about-page .section-header h2 {
+    color: #4154f1 !important;
+    font-family: "Poppins", sans-serif;
+    font-size: 25px;
+    font-weight: 760;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .about-card {
+    --about-accent: #315efb;
+    --about-accent-2: #13b8a7;
+    --about-soft: #f4f8ff;
+    --about-border: rgba(49, 94, 251, 0.22);
+    position: relative;
+    overflow: hidden;
+    padding: 32px;
+    border: 1px solid var(--about-border) !important;
+    border-radius: 8px;
+    background: linear-gradient(160deg, #ffffff 0%, var(--about-soft) 100%);
+    box-shadow: 0 18px 42px rgba(1, 41, 112, 0.12);
+    text-align: left;
+  }
+
+  .about-card-vision {
+    --about-accent: #0f9f6e;
+    --about-accent-2: #f2a51a;
+    --about-soft: #f4fbf7;
+    --about-border: rgba(15, 159, 110, 0.24);
+  }
+
+  .about-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--about-accent), var(--about-accent-2));
+  }
+
+  .about-card-head {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .about-card-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    color: var(--about-accent);
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid var(--about-border);
+    font-size: 26px;
+  }
+
+  .about-card h3 {
+    color: #0b1f4d;
+    font-family: "Poppins", sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 0;
+    text-align: left;
+  }
+
+  .about-card-subtitle {
+    color: #667085;
+    display: block;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .about-rich-text {
+    color: #34405c;
+    font-size: 16px;
+    line-height: 1.7;
+    text-align: left;
+  }
+
+  .about-rich-text + .about-rich-text {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(1, 41, 112, 0.08);
+  }
+
+  .about-rich-text p {
+    margin: 0 0 12px;
+  }
+
+  .about-rich-text ul,
+  .about-rich-text ol {
+    margin: 10px 0 16px;
+    padding-left: 26px;
+  }
+
+  .about-rich-text li {
+    margin-bottom: 7px;
+  }
+
+  .about-rich-text li::marker {
+    color: var(--about-accent);
+    font-weight: 800;
+  }
+
+  .about-rich-text h1,
+  .about-rich-text h2,
+  .about-rich-text h3,
+  .about-rich-text h4,
+  .about-rich-text h5,
+  .about-rich-text h6 {
+    color: #0b1f4d;
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 18px 0 10px;
+    text-align: left;
+  }
+
+  .about-rich-text h1,
+  .about-rich-text h2[data-rich-h1] {
+    font-size: 26px;
+  }
+
+  .about-rich-text h2 {
+    font-size: 23px;
+  }
+
+  .about-rich-text h3 {
+    font-size: 21px;
+  }
+
+  .about-rich-text h4,
+  .about-rich-text h5,
+  .about-rich-text h6 {
+    font-size: 18px;
+  }
+
+  .about-rich-text a {
+    color: var(--about-accent);
+    font-weight: 800;
+    text-decoration: none;
+    border-bottom: 1px solid var(--about-border);
+  }
+
+  .about-rich-text blockquote {
+    margin: 16px 0;
+    padding: 12px 16px;
+    border-left: 4px solid var(--about-accent);
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .about-highlight {
+    height: 100%;
+    padding: 22px;
+    border: 1px solid rgba(65, 84, 241, 0.16);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(1, 41, 112, 0.08);
+    text-align: left;
+  }
+
+  .about-highlight i {
+    color: #4154f1;
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .about-highlight h4 {
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    margin: 14px 0 8px;
+  }
+
+  .about-highlight p {
+    color: #526070;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (max-width: 767.98px) {
+    .about-card {
+      padding: 24px 18px;
+    }
+
+    .about-card-head {
+      align-items: flex-start;
+    }
+
+    .about-card h3 {
+      font-size: 23px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<br>
+<br><br>
+<hr style="border-top: 2px solid #000508;">
+
+<section id="values" class="values about-page">
+  <div class="container" data-aos="fade-up">
+
+    <header class="section-header">
+      <h1>WHO WE ARE</h1>
+      <p></p>
+    </header>
+
+    <div class="row">
+      {% for i in aboutus %}
+      <div class="col-lg-12">
+        <div class="box about-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="about-card-head" style="color: #0f9f6e;">
+            <span class="about-card-icon" ><i class="bi bi-building"
+   style="font-size: 40px; color: green;"></i></span>
+            <div>
+              <h3>INITIATOR SOLUTIONS</h3>
+              <span class="about-card-subtitle">LET'S INITIATE YOUR BUSINESS WITH INITIATOR SOLUTIONS</span>
+            </div>
+          </div>
+          {% if i.p1 %}<div class="about-rich-text">{{ i.p1|demote_h1 }}</div>{% endif %}
+          {% if i.p2 %}<div class="about-rich-text">{{ i.p2|demote_h1 }}</div>{% endif %}
+          {% if i.p3 %}<div class="about-rich-text">{{ i.p3|demote_h1 }}</div>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="row gy-4 mt-4">
+      <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+        <div class="about-highlight" data-aos="fade-up" data-aos-delay="100">
+          <i class="bi bi-window-stack"></i>
+          <h4>Software Development</h4>
+          <p>Website, portal, CRM, module and custom business application development for daily operations.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+        <div class="about-highlight" data-aos="fade-up" data-aos-delay="160">
+          <i class="bi bi-receipt-cutoff"></i>
+          <h4>Accounting Solutions</h4>
+          <p>Tally, Busy, Zoho and accounting software integration with practical workflow support.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+        <div class="about-highlight" data-aos="fade-up" data-aos-delay="220">
+          <i class="bi bi-headset"></i>
+          <h4>Reliable Support</h4>
+          <p>Requirement study, implementation, migration, training and support from one experienced team.</p>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <header class="section-header">
+      <h2>OUR VISION</h2>
+      <p></p>
+    </header>
+
+    <div class="row">
+      {% for i in aboutusvision %}
+      <div class="col-lg-12">
+        <div class="box about-card about-card-vision" data-aos="fade-up" data-aos-delay="200">
+          <div class="about-card-head">
+            <span class="about-card-icon"><i class="bi bi-bullseye"></i></span>
+            <div>
+              <h3>Business software with clarity</h3>
+              <span class="about-card-subtitle">Simple systems, stronger process and measurable growth</span>
+            </div>
+          </div>
+          {% if i.p1 %}<div class="about-rich-text">{{ i.p1|demote_h1 }}</div>{% endif %}
+          {% if i.p2 %}<div class="about-rich-text">{{ i.p2|demote_h1 }}</div>{% endif %}
+          {% if i.p3 %}<div class="about-rich-text">{{ i.p3|demote_h1 }}</div>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,310 @@
+{% extends "web2/wbase.html" %}
+{% block title %}{{ seo_title|default:page_heading }}{% endblock %}
+{% block metadata %}
+<meta content="{{ seo_description }}" name="description">
+<meta content="{{ seo_keywords }}" name="keywords">
+{% endblock %}
+
+{% load static %}
+
+{% block css %}
+<style>
+  .service-catalog .section-header h2 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    color: #0b1f4d !important;
+  }
+
+  .service-filter .btn {
+    border-radius: 8px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 8px 14px;
+    border-width: 1px;
+    box-shadow: 0 8px 20px rgba(1, 41, 112, 0.08);
+  }
+
+  .service-filter .btn-primary {
+    background: #4154f1;
+    border-color: #4154f1;
+  }
+
+  .service-card {
+    --service-accent: #315efb;
+    --service-accent-2: #13b8a7;
+    --service-soft: #f4f8ff;
+    --service-border: rgba(49, 94, 251, 0.24);
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--service-border) !important;
+    border-radius: 8px;
+    background: linear-gradient(160deg, #ffffff 0%, var(--service-soft) 100%);
+    box-shadow: 0 14px 35px rgba(1, 41, 112, 0.11);
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s;
+  }
+
+  .service-card-web-designing,
+  .service-card-graphics-designing {
+    --service-accent: #d94672;
+    --service-accent-2: #ff8a3d;
+    --service-soft: #fff7f3;
+    --service-border: rgba(217, 70, 114, 0.24);
+  }
+
+  .service-card-mobile-app-development,
+  .service-card-cloud-services,
+  .service-card-tally-on-cloud {
+    --service-accent: #0f9f6e;
+    --service-accent-2: #f2a51a;
+    --service-soft: #f4fbf7;
+    --service-border: rgba(15, 159, 110, 0.25);
+  }
+
+  .service-card-tally-customization-integration,
+  .service-card-tally-vertical-solutions {
+    --service-accent: #4154f1;
+    --service-accent-2: #bb0852;
+    --service-soft: #f7f8ff;
+    --service-border: rgba(65, 84, 241, 0.25);
+  }
+
+  .service-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--service-accent), var(--service-accent-2));
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 45px rgba(1, 41, 112, 0.16);
+  }
+
+  .service-card .service-media {
+    min-height: 172px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 24px 12px;
+  }
+
+  .service-card img {
+    max-height: 150px;
+    width: 100%;
+    object-fit: contain;
+    padding: 0 !important;
+  }
+
+  .service-card h3 {
+    margin: 0 0 10px;
+  }
+
+  .service-card h3 a {
+    color: #0b1f4d;
+    font-family: "Poppins", sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .service-card h3 a:hover {
+    color: var(--service-accent);
+  }
+
+  .service-card-body {
+    padding: 0 24px 24px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .service-badge {
+    display: inline-flex;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    min-width: 58%;
+    margin-bottom: 14px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    color: var(--service-accent);
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid var(--service-border);
+    box-shadow: 0 8px 18px rgba(1, 41, 112, 0.08);
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .service-preview {
+    display: -webkit-box;
+    min-height: 46px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    color: #34405c;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .service-card .btn-read-more {
+    margin-top: 0;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--service-accent), var(--service-accent-2));
+    box-shadow: 0 12px 26px rgba(1, 41, 112, 0.22);
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    min-width: 132px;
+    gap: 6px;
+    border: 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  }
+
+  .service-card .btn-read-more i {
+    margin-left: 6px;
+    transition: 0.3s;
+  }
+
+  .service-card .btn-read-more:hover {
+    color: #fff;
+    filter: brightness(0.94);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(1, 41, 112, 0.28);
+  }
+
+  .service-card .btn-read-more:hover i {
+    transform: translateX(4px);
+  }
+
+  .service-card-actions {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .service-card .btn-enquire-now {
+    margin-top: 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: var(--service-accent);
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid var(--service-border);
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    min-width: 132px;
+    box-shadow: 0 10px 22px rgba(1, 41, 112, 0.10);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+  }
+
+  .service-card .btn-enquire-now:hover {
+    color: #fff;
+    background: linear-gradient(135deg, var(--service-accent), var(--service-accent-2));
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(1, 41, 112, 0.22);
+  }
+
+  @media (max-width: 575.98px) {
+    .service-card-body {
+      padding: 0 16px 20px;
+    }
+
+    .service-card-actions {
+      flex-wrap: nowrap;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .service-card .btn-read-more,
+    .service-card .btn-enquire-now {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 9px 7px;
+      font-size: 13px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .service-card .btn-read-more i {
+      margin-left: 3px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<br>
+<br><br>
+<hr style="border-top: 1px solid #000508;">
+
+<section id="values" class="values service-catalog">
+  <div class="container" data-aos="fade-up">
+
+    <header class="section-header">
+      <h1 style="font-size: 25px; letter-spacing: 1px; font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">{{ page_heading }}</h1>
+      <p></p>
+    </header>
+
+    <div class="text-center pb-4 service-filter">
+      <a href="{% url 'web_dev' %}" class="btn {% if not active_group %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm m-1" title="All Services">All Services</a>
+      {% for group in service_groups %}
+        <a href="{% url 'web_dev' %}?group={{ group.key }}" class="btn {% if active_group == group.key %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm m-1" title="{{ group.label }}">{{ group.label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="row">
+      {% for item in service_items %}
+      {% with service=item.service %}
+      <div class="col-lg-4 col-md-6 pb-4">
+        <div class="box border service-card service-card-{{ item.group_key }}" data-aos="fade-up" data-aos-delay="200">
+          <a href="{{ item.detail_url }}" class="service-media" title="{{ service.display_title }}">
+            {% if service.img %}
+              <img src="{{ service.img.url }}" class="img-fluid" alt="{{ service.image_alt|default:service.display_title }}" title="{{ service.image_alt|default:service.display_title }}"{% if forloop.counter > 3 %} loading="lazy" decoding="async"{% endif %}>
+            {% else %}
+              {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=service.display_title %}
+            {% endif %}
+          </a>
+          <div class="service-card-body">
+            <h3><a href="{{ item.detail_url }}" title="{{ service.display_title }}">{{ service.display_title }}</a></h3>
+            <span class="service-badge">{{ item.group_label }}</span>
+            {% if service.short_description %}<p class="service-preview">{{ service.short_description|striptags }}</p>{% endif %}
+            <div class="service-card-actions">
+              <a href="{{ item.detail_url }}" class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center" title="{{ service.display_title }}">
+                <span>View Details</span>
+                <i class="bi bi-arrow-right"></i>
+              </a>
+              <button type="button" class="btn btn-enquire-now d-inline-flex align-items-center justify-content-center" title="Enquire Now" data-toggle="modal" data-target="#exampleModal">
+                <span>Enquire Now</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endwith %}
+      {% empty %}
+      <div class="col-lg-12 pb-3">
+        <div class="box border" data-aos="fade-up" data-aos-delay="200">
+          <h3>No Services Found</h3>
+          <p>Please select another service group.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

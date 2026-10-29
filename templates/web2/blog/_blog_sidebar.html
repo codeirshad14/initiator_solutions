@@ -1,0 +1,60 @@
+{% load static %}
+<aside class="blog-sidebar-panel">
+  <div class="blog-sidebar-section">
+    <h3 class="blog-sidebar-title">Search Blog</h3>
+    <div class="search-form">
+      <form method="get" action="{% url 'homeblog' %}">
+        <input type="text" name="keyword" class="form-control" value="{{ active_keyword }}" placeholder="Search topics" required>
+        <button type="submit"><i class="bi bi-search"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <div class="blog-sidebar-section">
+    <h3 class="blog-sidebar-title">Categories</h3>
+    <ul class="category-list">
+      <li><a href="{% url 'homeblog' %}" title="All Blog">All Blog <span>{{ blog_count|default:"" }}</span></a></li>
+      {% for category in categories %}
+      <li><a href="{% url 'homeblog' %}?keyword={{ category|urlencode }}" title="{{ category }}">{{ category }} <i class="bi bi-arrow-right-short"></i></a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="blog-sidebar-section">
+    <h3 class="blog-sidebar-title">Recent Posts</h3>
+    {% for bl in recent_posts %}
+    <div class="blog-recent-item">
+      {% if bl.image %}
+      <img src="{{ bl.image.url }}" alt="{{ bl.alt|default:bl.title }}" title="{{ bl.alt|default:bl.title }}" loading="lazy" decoding="async">
+      {% else %}
+      {% include "web2/partials/no_image.html" with placeholder_class="no-image-recent" placeholder_label=bl.title %}
+      {% endif %}
+      <div>
+        <h4><a href="{{ bl.get_absolute_url }}" title="{{ bl.title }}">{{ bl.title }}</a></h4>
+        <time datetime="{{ bl.pub_date|date:'Y-m-d' }}">{{ bl.pub_date|date:"M d, Y" }}</time>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="blog-sidebar-section">
+    <h3 class="blog-sidebar-title">Popular Tags</h3>
+    <div class="blog-tag-list">
+      {% for tag in all_tags %}
+      <a href="{% url 'homeblog' %}?keyword={{ tag|urlencode }}" title="{{ tag }}">{{ tag }}</a>
+      {% empty %}
+      <a href="{% url 'homeblog' %}?keyword=Tally" title="Tally">Tally</a>
+      <a href="{% url 'homeblog' %}?keyword=ERP" title="ERP">ERP</a>
+      <a href="{% url 'homeblog' %}?keyword=Website" title="Website">Website</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="blog-sidebar-section">
+    <div class="blog-cta">
+      <h4>Need a business software solution?</h4>
+      <p>Talk to Initiator Solutions for Tally customization, ERP, websites, cloud and digital growth.</p>
+      <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">Enquire Now</button>
+    </div>
+  </div>
+</aside>

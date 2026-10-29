@@ -1,0 +1,8 @@
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 21, 2026 - 16:05:41
+Django version 4.2.30, using settings 'initiator2023.local_settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+

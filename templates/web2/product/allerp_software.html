@@ -1,0 +1,67 @@
+{% extends "web2/wbase.html" %}
+{% block title %}All ERP Software{% endblock %} 
+
+{% block metadata %}
+<meta content="We Are Software Development & All Accounting Software Solutions company INITIATOR SOLUTIONS is one of the best in Partner for Tally,Busy,SAP,Zoho Book. INITIATOR SOLUTIONS is also Authorized Solution Partner In -- Tally, Busy, SAP, Zoho Etc." name="description">
+<meta content="All Accounting Software,Tally Prime,All Accounting Software,Accounting Software Company in noida,Tally Partner in Noida,Busy Partner in Delhi Ncr,Zoho  Authorized Partner"name="keywords">
+{% endblock %}
+
+
+{% load static %}
+
+
+
+ {% block content %}
+
+<br>
+<br><br>
+<hr style="border-top: 1px solid #000508;">
+<!-- ======= Values Section =======  rgba(127, 137, 161, 0.01);-->
+
+
+<section id="values" class="values" >
+
+
+    <div class="container" data-aos="fade-up">
+
+      <header class="section-header">
+        <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">All ERP Software</h2>
+        <p></p>
+      </header>
+
+
+
+      <div class="row">
+
+        {% for pro in allerp_sof %}
+
+        <div class="col-lg-4 pb-3 pr-3">
+          <div class="box border" data-aos="fade-up" data-aos-delay="200">
+            {% if pro.img %}
+              <img src="{{ pro.img.url }}" class="img-fluid" alt="{{ pro.name }}" title="{{ pro.name }}">
+            {% else %}
+              {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=pro.name %}
+            {% endif %}
+            <h3>{{pro.name}}</h3>
+            <p>{{pro.p1}}</p>
+            <p>{{pro.p2}}</p>
+            <p>{{pro.p3}}</p>
+            <p>{{pro.p4}}</p>
+            <p>{{pro.p5}}</p>
+          </div>
+        </div>
+        
+        {% endfor %}
+
+        
+      </div>      
+    </div>
+
+
+  </section><!-- End Values Section -->
+
+
+
+
+
+  {% endblock %}

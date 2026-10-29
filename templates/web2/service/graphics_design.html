@@ -1,0 +1,79 @@
+{% extends "web2/wbase.html" %}
+{% block title %}Graphics Designing{% endblock %}
+
+{% block metadata %}
+<meta content="Initiator Solutions is Graphic Design Solution Providers In Noida Uttar Pradesh India" name="description">
+<meta content="Logo Design company,Logo Design company in Noida, Logo Design company in Delhi Ncr,Logo Design company In India,catalogue Design, Video  Editing
+Video Editing company in Noida"name="keywords">
+{% endblock %} 
+
+{% load static %}
+
+ {% block content %}
+
+<br>
+<br><br>
+<hr style="border-top: 2px solid #000508;">
+
+
+<section id="values" class="values" >
+
+
+    <div class="container" data-aos="fade-up">
+
+      <header class="section-header">
+        <h2 style="font-size: 25px;  letter-spacing: 1px;  font-weight:760; margin: 0; color: #4154f1; text-transform: uppercase;">Graphics Designing</h2>
+        <p></p>
+      </header>
+
+      <div class="row">
+
+        {% for pro in service_list %}
+
+        <div class="col-lg-4 pb-3 pr-3">
+          <div class="box border" data-aos="fade-up" data-aos-delay="200">
+            {% if pro.img %}
+              <img src="{{ pro.img.url }}" class="img-fluid" alt="{{ pro.name }}" title="{{ pro.name }}">
+            {% else %}
+              {% include "web2/partials/no_image.html" with placeholder_class="no-image-card" placeholder_label=pro.name %}
+            {% endif %}
+            <h3>{{pro.name}}</h3>
+            <p>{{pro.p1}}</p>
+            <p>{{pro.p2}}</p>
+            <p>{{pro.p3}}</p>
+            <p>{{pro.p4}}</p>
+            <p>{{pro.p5}}</p>
+          </div>
+        </div>
+        
+        {% endfor %}
+
+
+       <!-- 
+       <div class="col-lg-4 mt-4 mt-lg-0">
+          <div class="box" data-aos="fade-up" data-aos-delay="400">
+            <img src="{% static 'web2\assets\img\values-2.png'%}" class="img-fluid" alt="">
+            <h3>Voluptatem voluptatum alias</h3>
+            <p>Repudiandae amet nihil natus in distinctio suscipit id. Doloremque ducimus ea sit non.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+          <div class="box" data-aos="fade-up" data-aos-delay="600">
+            <img src="{% static 'web2\assets\img\values-3.png' %}" class="img-fluid" alt="">
+            <h3>Fugit cupiditate alias nobis.</h3>
+            <p>Quam rem vitae est autem molestias explicabo debitis sint. Vero aliquid quidem commodi.</p>
+          </div>
+        </div>-->
+
+      </div>      
+
+
+    </div>
+
+
+  </section><!-- End Values Section -->
+
+
+
+{% endblock %}

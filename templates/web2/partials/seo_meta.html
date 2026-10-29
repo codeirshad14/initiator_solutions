@@ -1,0 +1,73 @@
+{% with page_title=seo_title|default:site_seo.default_title page_description=seo_description|default:site_seo.default_description page_keywords=seo_keywords|default:site_seo.default_keywords page_image=seo_image|default:seo_default_image page_type=seo_type|default:"website" page_url=seo_canonical_url|default:seo_current_url %}
+<link rel="canonical" href="{{ page_url }}">
+<meta name="robots" content="{% if not site_seo.robots_allow %}noindex,nofollow{% elif seo_noindex %}noindex,follow{% else %}index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1{% endif %}">
+<meta name="googlebot" content="{% if not site_seo.robots_allow %}noindex,nofollow{% elif seo_noindex %}noindex,follow{% else %}index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1{% endif %}">
+<meta name="bingbot" content="{% if not site_seo.robots_allow %}noindex,nofollow{% elif seo_noindex %}noindex,follow{% else %}index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1{% endif %}">
+<meta name="author" content="{{ seo_author|default:site_seo.organization_name }}">
+<meta name="publisher" content="{{ site_seo.organization_name }}">
+<meta name="theme-color" content="#4154f1">
+<meta name="classification" content="Software Development, Tally Solutions, ERP, Accounting Software">
+<meta name="subject" content="{{ page_keywords }}">
+<meta name="coverage" content="{{ site_seo.service_area }}">
+<meta name="distribution" content="Global">
+<meta name="rating" content="General">
+<meta name="revisit-after" content="7 days">
+<meta name="geo.region" content="{{ site_seo.region }}">
+<meta name="geo.placename" content="{{ site_seo.locality }}">
+<meta name="geo.position" content="{{ site_seo.latitude }};{{ site_seo.longitude }}">
+<meta name="ICBM" content="{{ site_seo.latitude }}, {{ site_seo.longitude }}">
+{% if site_seo.google_site_verification %}<meta name="google-site-verification" content="{{ site_seo.google_site_verification }}">{% endif %}
+{% if site_seo.bing_site_verification %}<meta name="msvalidate.01" content="{{ site_seo.bing_site_verification }}">{% endif %}
+<meta property="og:site_name" content="{{ site_seo.site_name }}">
+<meta property="og:type" content="{{ page_type }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_description }}">
+<meta property="og:url" content="{{ page_url }}">
+<meta property="og:image" content="{{ page_image }}">
+<meta property="og:image:alt" content="{{ page_title }}">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ page_description }}">
+<meta name="twitter:image" content="{{ page_image }}">
+{% if seo_published_time %}<meta property="article:published_time" content="{{ seo_published_time|date:'c' }}">{% endif %}
+{% if seo_modified_time %}<meta property="article:modified_time" content="{{ seo_modified_time|date:'c' }}">{% endif %}
+{% if seo_section %}<meta property="article:section" content="{{ seo_section }}">{% endif %}
+{% if seo_tags %}{% for tag in seo_tags %}<meta property="article:tag" content="{{ tag }}">{% endfor %}{% endif %}
+<script type="application/ld+json">{{ organization_schema_json|safe }}</script>
+<script type="application/ld+json">{{ website_schema_json|safe }}</script>
+{% if webpage_schema_json %}<script type="application/ld+json">{{ webpage_schema_json|safe }}</script>{% endif %}
+{% if breadcrumb_schema_json %}<script type="application/ld+json">{{ breadcrumb_schema_json|safe }}</script>{% endif %}
+{% if article_schema_json %}<script type="application/ld+json">{{ article_schema_json|safe }}</script>{% endif %}
+{% if service_schema_json %}<script type="application/ld+json">{{ service_schema_json|safe }}</script>{% endif %}
+{% if product_schema_json %}<script type="application/ld+json">{{ product_schema_json|safe }}</script>{% endif %}
+{% if faq_schema_json %}<script type="application/ld+json">{{ faq_schema_json|safe }}</script>{% endif %}
+{% block extra_schema %}{% endblock %}
+{% if site_seo.google_tag_manager_id %}
+<script>
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','{{ site_seo.google_tag_manager_id }}');
+</script>
+{% endif %}
+{% if site_seo.google_analytics_id %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site_seo.google_analytics_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ site_seo.google_analytics_id }}');
+</script>
+{% endif %}
+{% if site_seo.microsoft_clarity_id %}
+<script>
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "{{ site_seo.microsoft_clarity_id }}");
+</script>
+{% endif %}
+{% endwith %}

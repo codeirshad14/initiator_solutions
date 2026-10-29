@@ -1,0 +1,92 @@
+{% extends "web2/wbase.html" %}
+{% block title %}{{ blog.seo_title }}{% endblock %}
+{% block metadata %}
+<meta content="{{ blog.seo_description }}" name="description">
+<meta content="{{ blog.seo_keywords }}" name="keywords">
+{% endblock %}
+
+{% load static seo_tags %}
+
+{% block css %}
+{% include "web2/blog/_blog_styles.html" %}
+{% endblock %}
+
+{% block content %}
+
+<main id="main" class="blog-modern">
+  <section class="breadcrumbs">
+    <div class="container">
+      <ol>
+        <li><a href="{% url 'index' %}" title="Home">Home</a></li>
+        <li><a href="{% url 'homeblog' %}" title="Blog">Blog</a></li>
+        <li>{{ blog.title }}</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="blog-article-hero">
+    <div class="container" data-aos="fade-up">
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <span class="blog-hero-eyebrow"><i class="bi bi-journal-text"></i> {{ blog.type }}</span>
+          <h1>{{ blog.title }}</h1>
+          <p>{{ blog.seo_description }}</p>
+          <div class="blog-meta">
+            <span><i class="bi bi-person"></i> {{ blog.author_name }}</span>
+            <span><i class="bi bi-clock"></i> <time datetime="{{ blog.pub_date|date:'Y-m-d' }}">{{ blog.pub_date|date:"M d, Y" }}</time></span>
+            <span><i class="bi bi-arrow-repeat"></i> Updated {{ blog.updated_at|date:"M d, Y" }}</span>
+          </div>
+        </div>
+        <div class="col-lg-5 mt-4 mt-lg-0">
+          <div class="blog-article-media">
+            {% if blog.image %}
+            <img src="{{ blog.image.url }}" alt="{{ blog.alt|default:blog.title }}" title="{{ blog.alt|default:blog.title }}">
+            {% else %}
+            {% include "web2/partials/no_image.html" with placeholder_class="no-image-detail" placeholder_label=blog.title %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-content-section">
+    <div class="container" data-aos="fade-up">
+      <div class="row">
+        <div class="col-lg-8">
+          <article class="blog-single-card">
+            <div class="blog-single-body">
+              <div class="blog-tag-list mb-4">
+                {% for tag in seo_tags %}
+                <a href="{% url 'homeblog' %}?keyword={{ tag|urlencode }}" title="{{ tag }}">{{ tag }}</a>
+                {% empty %}
+                <a href="{% url 'homeblog' %}?keyword={{ blog.type|urlencode }}" title="{{ blog.type }}">{{ blog.type }}</a>
+                {% endfor %}
+              </div>
+
+              <div class="blog-rich-content">
+                {{ blog.fullsummary|demote_h1 }}
+              </div>
+
+              <div class="blog-cta mt-4">
+                <h4>Need help with this topic?</h4>
+                <p>Initiator Solutions can help you plan and build Tally, ERP, website, cloud and digital business solutions.</p>
+                <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">Enquire Now</button>
+              </div>
+            </div>
+          </article>
+
+          <div class="mt-4">
+            <a class="blog-read-more" href="{% url 'homeblog' %}" title="All Blog"><i class="bi bi-arrow-left"></i> Back To Blog</a>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          {% include "web2/blog/_blog_sidebar.html" %}
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

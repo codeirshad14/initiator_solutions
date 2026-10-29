@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,follow">
+  <title>502 Bad Gateway - INITIATOR SOLUTIONS</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: #4154f1;
+      --ink: #0b1f4d;
+      --muted: #34405c;
+      --danger: #9f1239;
+      --line: rgba(65, 84, 241, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: #f6f9ff;
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(760px, 100%);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 18px 45px rgba(1, 41, 112, 0.12);
+    }
+
+    header {
+      padding: 28px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--danger), var(--brand));
+    }
+
+    .code {
+      display: inline-flex;
+      min-width: 84px;
+      margin-bottom: 12px;
+      padding: 7px 14px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--danger);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.2;
+    }
+
+    section {
+      padding: 26px 28px 30px;
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    ul {
+      margin: 0 0 22px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 800;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <span class="code">502</span>
+      <h1>Bad Gateway</h1>
+    </header>
+    <section>
+      <p>The web server could not connect to the Django application.</p>
+      <ul>
+        <li>Check whether Gunicorn, uWSGI, or the Django process is running.</li>
+        <li>Check the nginx upstream socket or port path.</li>
+        <li>Check nginx error logs and application logs for the same time.</li>
+      </ul>
+      <a href="/">Go to homepage</a>
+    </section>
+  </main>
+</body>
+</html>

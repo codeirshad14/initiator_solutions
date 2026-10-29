@@ -1,0 +1,453 @@
+{% extends "web2/wbase.html" %}
+{% block title %}{{ seo_title|default:"Contact Us" }}{% endblock %}
+
+{% block metadata %}
+<meta content="{{ seo_description }}" name="description">
+<meta content="{{ seo_keywords }}" name="keywords">
+{% endblock %}
+
+{% load static %}
+
+{% block css %}
+<style>
+  .contact-modern {
+    color: #34405c;
+    padding-bottom: 50px;
+  }
+
+  .contact-modern .section-header h1,
+  .contact-modern .section-header h2 {
+    color: #4154f1 !important;
+    font-family: "Poppins", sans-serif;
+    font-size: 25px;
+    font-weight: 760;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .contact-intro {
+    padding: 34px 0 16px;
+  }
+
+  .contact-intro p {
+    max-width: 760px;
+    margin: 8px auto 0;
+    color: #526070;
+    font-size: 16px;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .contact-section {
+    padding: 28px 0 0;
+  }
+
+  .contact-card,
+  .contact-form-card,
+  .contact-info-card,
+  .contact-map-card,
+  .contact-time-card {
+    border: 1px solid rgba(65, 84, 241, 0.16);
+    border-radius: 8px;
+    box-shadow: 0 14px 32px rgba(1, 41, 112, 0.09);
+  }
+
+  .contact-card {
+    --contact-accent: #4154f1;
+    --contact-soft: #f4f8ff;
+    height: 100%;
+    display: block;
+    padding: 22px;
+    color: #34405c;
+    background: linear-gradient(160deg, #ffffff 0%, var(--contact-soft) 100%);
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .contact-card:hover {
+    color: #34405c;
+    text-decoration: none;
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(1, 41, 112, 0.13);
+  }
+
+  .contact-card.whatsapp {
+    --contact-accent: #16a34a;
+    --contact-soft: #f0fbf4;
+  }
+
+  .contact-card.call {
+    --contact-accent: #ee6c20;
+    --contact-soft: #fff6ef;
+  }
+
+  .contact-card.email {
+    --contact-accent: #0f9f6e;
+    --contact-soft: #f2fbf7;
+  }
+
+  .contact-card.support {
+    --contact-accent: #bb0852;
+    --contact-soft: #fff4f8;
+  }
+
+  .contact-icon,
+  .contact-info-card i {
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: var(--contact-accent, #4154f1);
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(65, 84, 241, 0.12);
+    font-size: 25px;
+    margin-bottom: 14px;
+  }
+
+  .contact-card h3,
+  .contact-info-card h3,
+  .contact-form-card h3,
+  .contact-map-card h3,
+  .contact-time-card h3 {
+    color: #012970;
+    font-family: "Poppins", sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+    margin: 0 0 8px;
+  }
+
+  .contact-card p,
+  .contact-info-card p,
+  .contact-map-card p {
+    color: #526070;
+    font-size: 15px;
+    line-height: 1.58;
+    margin: 0;
+  }
+
+  .contact-card strong {
+    display: block;
+    color: var(--contact-accent);
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    margin-top: 10px;
+  }
+
+  .contact-info-card {
+    height: 100%;
+    padding: 22px;
+    background: #fff;
+    text-align: left;
+  }
+
+  .contact-info-card i {
+    color: #4154f1;
+  }
+
+  .contact-info-card h3 + p a {
+    color: #526070;
+    text-decoration: none;
+  }
+
+  .contact-info-card h3 + p a:hover {
+    color: #4154f1;
+  }
+
+  .contact-map-card {
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .contact-map-card .contact-map-copy {
+    padding: 22px 22px 16px;
+  }
+
+  .contact-map-card iframe {
+    display: block;
+    width: 100%;
+    min-height: 420px;
+    border: 0;
+  }
+
+  .contact-right-panel {
+    position: sticky;
+    top: 98px;
+  }
+
+  .contact-form-card {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    background: linear-gradient(160deg, #ffffff 0%, #f6f9ff 100%);
+  }
+
+  .contact-form-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #4154f1, #18bb93);
+  }
+
+  .contact-form-card p {
+    color: #526070;
+    margin-bottom: 20px;
+  }
+
+  .contact-form-card label {
+    color: #012970;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 7px;
+  }
+
+  .contact-form-card .form-control {
+    min-height: 46px;
+    border: 1px solid rgba(65, 84, 241, 0.18);
+    border-radius: 8px;
+    color: #34405c;
+    box-shadow: none;
+  }
+
+  .contact-form-card textarea.form-control {
+    min-height: 128px;
+  }
+
+  .contact-form-card .form-control:focus {
+    border-color: #4154f1;
+    box-shadow: 0 0 0 0.15rem rgba(65, 84, 241, 0.12);
+  }
+
+  .contact-submit-btn {
+    border-radius: 8px;
+    color: #fff;
+    background: #4154f1;
+    border-color: #4154f1;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    padding: 10px 18px;
+    box-shadow: 0 10px 24px rgba(65, 84, 241, 0.22);
+  }
+
+  .contact-submit-btn:hover {
+    color: #fff;
+    background: #5969f3;
+  }
+
+  .contact-time-card {
+    margin-top: 18px;
+    padding: 24px;
+    color: #fff;
+    background: linear-gradient(135deg, #012970, #4154f1);
+    overflow: hidden;
+  }
+
+  .contact-map-section {
+    padding-top: 12px;
+  }
+
+  .contact-time-card h3,
+  .contact-time-card p {
+    color: #fff;
+  }
+
+  .contact-time-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.86);
+    line-height: 1.58;
+  }
+
+  .contact-time-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.20);
+  }
+
+  .contact-time-row i {
+    color: #fff;
+    font-size: 23px;
+    line-height: 1;
+  }
+
+  .contact-time-row strong {
+    display: block;
+    color: #fff;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+  }
+
+  .contact-time-row span {
+    display: block;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 991.98px) {
+    .contact-right-panel {
+      position: static;
+      margin-top: 8px;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .contact-form-card,
+    .contact-info-card,
+    .contact-card,
+    .contact-time-card {
+      padding: 20px 16px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<br>
+<br><br>
+<hr style="border-top: 2px solid #000508;">
+
+<main class="contact-modern">
+  <section class="contact-intro">
+    <div class="container" data-aos="fade-up">
+      <header class="section-header">
+        <h1>Contact Us</h1>
+        <p></p>
+      </header>
+      <p>Reach Initiator Solutions for Tally customization, ERP, website development, cloud, mobile apps and business software support.</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container" data-aos="fade-up">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <a class="contact-card whatsapp" href="https://wa.me/918882595800?text=Hi%20Initiator%20Solutions%20Team.%20I%20want%20to%20discuss%20a%20business%20software%20requirement." target="_blank" rel="noopener">
+            <span class="contact-icon"><i class="bi bi-whatsapp"></i></span>
+            <h3>WhatsApp</h3>
+            <p>Quickly message our team.</p>
+            <strong>Open WhatsApp</strong>
+          </a>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <a class="contact-card call" href="tel:+918882595800">
+            <span class="contact-icon"><i class="bi bi-telephone-outbound"></i></span>
+            <h3>Call</h3>
+            <p>Talk to our support team.</p>
+            <strong>+91 88825 95800</strong>
+          </a>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <a class="contact-card email" href="mailto:{{ site_seo.email|default:'info@initiatorsolutions.com' }}">
+            <span class="contact-icon"><i class="bi bi-envelope"></i></span>
+            <h3>Email</h3>
+            <p>Send your requirement.</p>
+            <strong>{{ site_seo.email|default:"info@initiatorsolutions.com" }}</strong>
+          </a>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="contact-card support">
+            <span class="contact-icon"><i class="bi bi-headset"></i></span>
+            <h3>Support</h3>
+            <p>Setup, changes and help.</p>
+            <strong>Business hours</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="row align-items-start">
+        <div class="col-lg-5 mb-4">
+          <div class="row">
+            <div class="col-md-6 col-lg-12 mb-4">
+              <div class="contact-info-card">
+                <i class="bi bi-envelope"></i>
+                <h3>Email</h3>
+                <p><a href="mailto:{{ site_seo.email|default:'info@initiatorsolutions.com' }}">{{ site_seo.email|default:"info@initiatorsolutions.com" }}</a></p>
+              </div>
+            </div>
+            {% for cont_lists in cont_list %}
+            <div class="col-md-6 col-lg-12 mb-4">
+              <div class="contact-info-card">
+                <i class="{{ cont_lists.iconcode }}"></i>
+                <h3>{{ cont_lists.title }}</h3>
+                {% if cont_lists.p1 %}<p>{{ cont_lists.p1 }}</p>{% endif %}
+                {% if cont_lists.p2 %}<p>{{ cont_lists.p2 }}</p>{% endif %}
+                {% if cont_lists.p3 %}<p>{{ cont_lists.p3 }}</p>{% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col-lg-7 mb-4">
+          <div class="contact-right-panel">
+            <form action="{% url 'contact_email' %}" method="post" class="contact-form-card" autocomplete="off">
+              {% csrf_token %}
+              <h3>Send Enquiry</h3>
+              <p>Share your details and our team will contact you.</p>
+              {% include "web2/_enquiry_form_fields.html" with enquiry_id_prefix="page" enquiry_half_class="col-md-6 mb-3" enquiry_full_class="col-md-12 mb-3" enquiry_message_class="col-md-12 mb-4" enquiry_message_rows="5" enquiry_button_class="btn contact-submit-btn" enquiry_button_wrapper_class="col-md-12" %}
+            </form>
+
+            <div class="contact-time-card">
+              <h3>Contact Time</h3>
+              <p>For quicker response, connect with us during business hours.</p>
+              <div class="contact-time-row">
+                <i class="bi bi-clock-history"></i>
+                <div>
+                  <strong>Business Hours</strong>
+                  <span>Monday to Friday, 10:00 AM to 6:30 PM</span>
+                </div>
+              </div>
+              <div class="contact-time-row">
+                <i class="bi bi-geo-alt"></i>
+                <div>
+                  <strong>Office</strong>
+                  <span>{{ site_seo.street_address }}, {{ site_seo.locality }}, {{ site_seo.region }}</span>
+                </div>
+              </div>
+              {% if site_seo.service_area %}
+              <div class="contact-time-row">
+                <i class="bi bi-pin-map"></i>
+                <div>
+                  <strong>Areas Served</strong>
+                  <span>{{ site_seo.service_area }}</span>
+                </div>
+              </div>
+              {% endif %}
+              <div class="contact-time-row">
+                <i class="bi bi-lightning-charge"></i>
+                <div>
+                  <strong>Best For</strong>
+                  <span>Tally customization, ERP, website, cloud and business software enquiries.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-map-section">
+        <div class="contact-map-card">
+          <div class="contact-map-copy">
+            <h3>Google Maps Location</h3>
+            <p>Visit Initiator Solutions or use the enquiry form to schedule a discussion.</p>
+          </div>
+          <iframe title="INITIATOR SOLUTIONS"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.923177622704!2d77.33552571460267!3d28.572069493566687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cebc84d23bcff%3A0x18c6aa04618de1d!2sINITIATOR%20SOLUTIONS!5e0!3m2!1sen!2sin!4v1676552503138!5m2!1sen!2sin" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}
