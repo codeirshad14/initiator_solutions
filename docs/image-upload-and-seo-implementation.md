@@ -4,7 +4,14 @@ Date: 2026-07-20
 
 ## Upload Size Policy
 
-All active website image uploads are optional and have no Django-level file-size limit.
+Update 2026-10-30: admin uploads are limited to **10 MB per file** by the admin
+forms (`UploadSizeLimitForm` in `web2/admin.py`); a larger file shows a form
+message instead of an error page. There is still no model-level validator, so no
+migration was needed. nginx must allow it: `client_max_body_size 12M;` (see
+`docs/deploy-checklist.md`). Pages show resized WebP copies, so a large upload
+does not slow the website down.
+
+Original policy (2026-07-20): all active website image uploads are optional and have no Django-level file-size limit.
 
 Implemented changes:
 

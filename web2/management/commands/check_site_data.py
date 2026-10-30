@@ -3,10 +3,19 @@
     python manage.py check_site_data
 
 Renders every public page the way a visitor would and reports pages that crash,
-missing image files, and data that would break links or the layout. It never
-changes data. Exit code is 1 when an ERROR is found, so it can gate a deploy.
+missing image files, and data that would break links or the layout. It also
+checks that admin uploads can be saved (upload folders writable, temp folder,
+free disk space); run it as the gunicorn user for that check to be meaningful:
+
+    sudo -u <gunicorn-user> <venv>/bin/python manage.py check_site_data
+
+It never changes data; it only writes and deletes a tiny test file in each
+upload folder. Exit code is 1 when an ERROR is found, so it can gate a deploy.
 """
+import os
 import re
+import shutil
+import tempfile
 import traceback
 from urllib.parse import urlparse
 
@@ -17,11 +26,16 @@ from django.http.request import validate_host
 from django.test import Client
 from django.urls import reverse
 
+from web2.images import OPTIMIZED_DIR
 from web2.models import (
-    AboutUSModel, Blog, CatalogGroup, Lan_AboutusModel, Lan_PageBanModel, PortfolioModel, Product, Service, SiteSEO,
+    AboutUSModel, Blog, CatalogGroup, Lan_AboutusModel, Lan_PageBanModel, PortfolioModel, Product, ProductUpload,
+    Service, SiteSEO,
 )
 
 SLUG_RE = re.compile(r'^[-a-zA-Z0-9_]+$')
+# Models whose files are uploaded in admin; their upload_to folders must be writable.
+UPLOAD_MODELS = (Lan_PageBanModel, Lan_AboutusModel, Product, Service, Blog, PortfolioModel, ProductUpload)
+MIN_FREE_DISK_MB = 500
 STATIC_PAGES = (
     'index', 'aboutus', 'portfolio', 'contact', 'web_product', 'web_dev', 'our_module_services', 'homeblog',
     'robots_txt', 'sitemap_xml', 'llms_txt',
@@ -76,6 +90,8 @@ class Command(BaseCommand):
         if not AboutUSModel.objects.exists():
             self.warn('Who We Are page has no content records.')
 
+        self.check_uploads()
+
         summary = f'{self.errors} error(s), {self.warnings} warning(s)'
         if self.errors:
             raise CommandError(f'Site data check finished: {summary}.')
@@ -129,6 +145,48 @@ class Command(BaseCommand):
             self.error(f'{label} {url} returns HTTP {response.status_code}')
         else:
             self.ok(f'{url}')
+
+    def check_uploads(self):
+        # A folder the gunicorn user cannot write to, or a full disk, makes the
+        # admin "Save" with a new image fail with a 500 error.
+        self.section('Uploads')
+        if hasattr(os, 'geteuid') and os.geteuid() == 0:
+            self.warn('Running as root, which can write everywhere: run as the gunicorn user '
+                      '(sudo -u <user> ...) to find permission problems.')
+
+        folders = {OPTIMIZED_DIR}
+        for model in UPLOAD_MODELS:
+            folders.update(
+                field.upload_to for field in model._meta.fields
+                if isinstance(getattr(field, 'upload_to', None), str) and field.upload_to
+            )
+        failed = False
+        for folder in sorted(folders):
+            failed |= not self.check_writable(os.path.join(settings.MEDIA_ROOT, folder), f'Upload folder {folder}/')
+        temp_dir = settings.FILE_UPLOAD_TEMP_DIR or tempfile.gettempdir()
+        failed |= not self.check_writable(temp_dir, 'Upload temp folder')
+        if failed:
+            self.stdout.write('  Fix: sudo chown -R <gunicorn-user>:<gunicorn-user> <folder>  (then retry the upload)')
+
+        free_mb = shutil.disk_usage(settings.MEDIA_ROOT if os.path.isdir(settings.MEDIA_ROOT) else settings.BASE_DIR).free // (1024 * 1024)
+        if free_mb < MIN_FREE_DISK_MB:
+            self.error(f'Only {free_mb} MB free disk space; uploads will fail. Free up space (old logs, backups).')
+        else:
+            self.ok(f'{free_mb} MB free disk space')
+
+    def check_writable(self, path, label):
+        # Django creates missing upload folders, so check the nearest existing one.
+        existing = path
+        while not os.path.isdir(existing) and os.path.dirname(existing) != existing:
+            existing = os.path.dirname(existing)
+        try:
+            with tempfile.NamedTemporaryFile(dir=existing, prefix='.write-check-'):
+                pass
+        except OSError as exc:
+            self.error(f'{label} is not writable ({existing}): {exc.strerror or exc}. Image uploads there fail with a 500 error.')
+            return False
+        self.ok(f'{label} writable')
+        return True
 
     def check_images(self, queryset, field, label):
         missing = 0

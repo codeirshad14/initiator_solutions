@@ -34,6 +34,10 @@ stored in `MEDIA_ROOT/_optimized/`; originals are never changed.
 
 `check_site_data` is read-only. It reports pages that would crash, image files
 missing on the server, invalid group slugs and counters that are not numbers.
+Its "Uploads" section finds what makes admin image uploads fail with a 500:
+upload folders or the temp folder not writable, and low disk space. Run it as
+the gunicorn user so permissions are tested for real:
+`sudo -u <gunicorn-user> <venv>/bin/python manage.py check_site_data`.
 
 ## 4. Static files and restart
 
@@ -62,6 +66,35 @@ Site SEO Settings, and fill founder name / founding year.
 python manage.py migrate web2 0043   # reverses 0044-0047 and restores old group values
 ```
 Then restore the previous code (or the `pg_dump` backup).
+
+## nginx: allow image uploads up to 10 MB (required)
+
+Admin accepts images up to 10 MB (`web2/admin.py`, `MAX_UPLOAD_MB`). nginx
+allows only 1 MB by default and rejects anything larger with "413 Request
+Entity Too Large" before Django sees it. In the `server { listen 443 ... }`
+block for www (12M leaves room for the other form fields):
+
+```nginx
+client_max_body_size 12M;
+```
+
+```bash
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+Uploaded files are written to `static/dynamic_images/` by the gunicorn user, so
+that folder must stay writable by it. If uploads give a 500 error, check:
+
+```bash
+ps -o user= -C gunicorn | sort -u          # the gunicorn user
+sudo -u <gunicorn-user> test -w static/dynamic_images/web2/product && echo WRITABLE || echo NOT_WRITABLE
+sudo chown -R <gunicorn-user>:<gunicorn-user> static/dynamic_images   # fix if NOT_WRITABLE
+```
+
+Run `git pull` and `manage.py` commands as that user (not with sudo), so new
+folders keep the right owner. Since this update, 500 errors log the full
+traceback next to the diagnostic ID shown on the error page:
+`sudo journalctl -u gunicorn --since "15 min ago" | grep -A 40 <ID>`.
 
 ## nginx: compression and browser caching (recommended)
 

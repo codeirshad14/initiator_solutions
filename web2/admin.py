@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.contenttypes.admin import GenericTabularInline
+from django.core.files.uploadedfile import UploadedFile
 from .models import Tally_Prime_Model, Blog, ContactModel, \
     WebDevModel, AboutUSModel, AboutVisionModel, PortfolioModel, All_AccoutingModel, All_ERPModel, Web_DesignModel, \
     Web_Portal_Dev, MobileAppModel, Tally_Customization, Tally_VerticalModel, Tally_CloudModel, Digital_Mkt_Model, \
@@ -13,6 +14,29 @@ SEO_FIELDSET_HINT = (
     'Quick rules: meta title 50-60 characters, meta description 120-155 characters, one focus keyword, '
     'canonical URL blank.'
 )
+
+
+MAX_UPLOAD_MB = 10
+
+
+class UploadSizeLimitForm(forms.ModelForm):
+    """Base admin form: uploaded files over 10 MB get a clear form message.
+
+    nginx must accept the same size (client_max_body_size 12M), otherwise it
+    rejects the upload before Django sees it; see docs/deploy-checklist.md.
+    """
+
+    def clean(self):
+        cleaned_data = super().clean()
+        for name, field in self.fields.items():
+            value = cleaned_data.get(name)
+            if isinstance(field, forms.FileField) and isinstance(value, UploadedFile) \
+                    and value.size > MAX_UPLOAD_MB * 1024 * 1024:
+                self.add_error(name, (
+                    f'This file is {value.size / (1024 * 1024):.1f} MB; the limit is {MAX_UPLOAD_MB} MB. '
+                    'Please resize or compress it (for example 1600 px wide JPG or WebP).'
+                ))
+        return cleaned_data
 
 
 class RichTextEditorWidget(forms.Textarea):
@@ -29,7 +53,7 @@ class RichTextEditorWidget(forms.Textarea):
         super().__init__(attrs=attrs)
 
 
-class BlogAdminForm(forms.ModelForm):
+class BlogAdminForm(UploadSizeLimitForm):
     class Meta:
         model = Blog
         fields = '__all__'
@@ -38,7 +62,7 @@ class BlogAdminForm(forms.ModelForm):
         }
 
 
-class ProductAdminForm(forms.ModelForm):
+class ProductAdminForm(UploadSizeLimitForm):
     class Meta:
         model = Product
         fields = '__all__'
@@ -48,7 +72,7 @@ class ProductAdminForm(forms.ModelForm):
         }
 
 
-class ServiceAdminForm(forms.ModelForm):
+class ServiceAdminForm(UploadSizeLimitForm):
     class Meta:
         model = Service
         fields = '__all__'
@@ -58,7 +82,7 @@ class ServiceAdminForm(forms.ModelForm):
         }
 
 
-class AboutRichTextForm(forms.ModelForm):
+class AboutRichTextForm(UploadSizeLimitForm):
     class Meta:
         fields = '__all__'
         widgets = {
@@ -68,7 +92,7 @@ class AboutRichTextForm(forms.ModelForm):
         }
 
 
-class LegacyProductRichTextForm(forms.ModelForm):
+class LegacyProductRichTextForm(UploadSizeLimitForm):
     rich_text_fields = ('p1', 'p2', 'p3', 'p4', 'p5')
 
     class Meta:
@@ -84,6 +108,7 @@ class LegacyProductRichTextForm(forms.ModelForm):
 
 class ProductUploadInline(GenericTabularInline):
     model = ProductUpload
+    form = UploadSizeLimitForm
     extra = 3
     max_num = 100
     fields = ('title', 'file', 'alt_text', 'sort_order', 'is_active')
@@ -389,6 +414,7 @@ class AboutVisionModelAdmin(admin.ModelAdmin):
 
 @admin.register(PortfolioModel)
 class PortfolioModelAdmin(admin.ModelAdmin):
+    form = UploadSizeLimitForm
     list_display = [ 'id', 'user','name'] #'title'
 
 
@@ -397,10 +423,12 @@ class PortfolioModelAdmin(admin.ModelAdmin):
 
 @admin.register(Lan_PageBanModel)
 class Lan_PageBanModelAdmin(admin.ModelAdmin):
+    form = UploadSizeLimitForm
     list_display = [ 'id', 'user','Slogen','Slogen2','imagalt','img']
 
 @admin.register(Lan_AboutusModel)
 class Lan_AboutusModelAdmin(admin.ModelAdmin):
+    form = UploadSizeLimitForm
     list_display = [ 'id', 'user','text1','text2','imagalt','img']
 
 
@@ -418,6 +446,7 @@ class Lan_ServicesModelAdmin(LegacyServiceAdminMixin, admin.ModelAdmin):
 
 @admin.register(ProductUpload)
 class ProductUploadAdmin(admin.ModelAdmin):
+    form = UploadSizeLimitForm
     list_display = ('id', 'title', 'product', 'file', 'sort_order', 'is_active', 'uploaded_at')
     list_filter = ('is_active', 'content_type')
     search_fields = ('title', 'alt_text', 'file')

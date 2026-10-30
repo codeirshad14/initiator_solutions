@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import re
+import sys
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 from uuid import uuid4
@@ -1034,6 +1035,9 @@ def custom_500(request):
   seo_title = "Server Error - INITIATOR SOLUTIONS"
   seo_description = "A temporary server error occurred on Initiator Solutions."
   diagnostics = _error_diagnostic_context(request, 500)
+  # Django calls this handler while the exception is still being handled, so the
+  # traceback can be logged with the diagnostic ID. Without it the production log
+  # (DEBUG off, no ADMINS) never shows why a request failed.
   logger.error(
     '500 server error diagnostic_id=%s method=%s path=%s referrer=%s user_agent=%s',
     diagnostics['diagnostic_id'],
@@ -1041,6 +1045,7 @@ def custom_500(request):
     diagnostics['requested_path'],
     diagnostics['referrer'],
     diagnostics['user_agent'],
+    exc_info=sys.exc_info()[0] is not None,
   )
   context = {
     "seo_title": seo_title,

@@ -214,6 +214,20 @@ class SEOEndpointTests(TestCase):
         self.assertIn('Diagnostic ID', body)
         self.assertIn('<meta name="robots" content="noindex,follow">', body)
 
+    def test_custom_500_logs_the_full_traceback(self):
+        request = RequestFactory().post('/admin/web2/product/5/change/')
+
+        with self.assertLogs('web2.errors', 'ERROR') as logs:
+            try:
+                raise PermissionError(13, 'Permission denied', '/srv/static/dynamic_images/web2/product/x.png')
+            except PermissionError:
+                response = views.custom_500(request)
+
+        self.assertEqual(response.status_code, 500)
+        self.assertIn('Traceback (most recent call last)', logs.output[0])
+        self.assertIn('PermissionError', logs.output[0])
+        self.assertIn('/admin/web2/product/5/change/', logs.output[0])
+
     def test_static_502_page_exists_for_nginx_gateway_errors(self):
         error_page = Path(settings.BASE_DIR) / 'static' / 'error_pages' / '502.html'
 
@@ -595,6 +609,44 @@ class DeploySafetyTests(TestCase):
         self.assertIn('crashes: ValueError: broken template', out.getvalue())
         self.assertIn(product.get_absolute_url(), out.getvalue())
 
+    def test_check_site_data_checks_upload_folders_and_disk_space(self):
+        Lan_PageBanModel.objects.create(user=self.user)
+        out = StringIO()
+
+        call_command('check_site_data', stdout=out)
+
+        for line in ('Upload folder web2/product/ writable', 'Upload folder web2/landingpage/ writable',
+                     'Upload folder _optimized/ writable', 'Upload temp folder writable', 'MB free disk space'):
+            self.assertIn(line, out.getvalue())
+
+    def test_check_site_data_fails_when_an_upload_folder_is_not_writable(self):
+        Lan_PageBanModel.objects.create(user=self.user)
+        real_temp_file = tempfile.NamedTemporaryFile
+
+        def temp_file(*args, **kwargs):
+            if 'product' in kwargs.get('dir', ''):
+                raise PermissionError(13, 'Permission denied')
+            return real_temp_file(*args, **kwargs)
+
+        out = StringIO()
+        with mock.patch('web2.management.commands.check_site_data.tempfile.NamedTemporaryFile', side_effect=temp_file):
+            with self.assertRaises(CommandError):
+                call_command('check_site_data', stdout=out)
+
+        self.assertIn('Upload folder web2/product/ is not writable', out.getvalue())
+        self.assertIn('Permission denied', out.getvalue())
+        self.assertIn('sudo chown -R', out.getvalue())
+
+    def test_check_site_data_fails_when_disk_is_almost_full(self):
+        Lan_PageBanModel.objects.create(user=self.user)
+        out = StringIO()
+
+        with mock.patch('web2.management.commands.check_site_data.shutil.disk_usage', return_value=mock.Mock(free=100 * 1024 * 1024)):
+            with self.assertRaises(CommandError):
+                call_command('check_site_data', stdout=out)
+
+        self.assertIn('Only 100 MB free disk space', out.getvalue())
+
     def test_check_site_data_reports_missing_home_banner(self):
         out = StringIO()
 
@@ -786,6 +838,69 @@ class OptimizedImageTests(TestCase):
 
         self.assertEqual(image_url(Lan_PageBanModel(img='web2/landingpage/logo.svg').img, 800), f'{settings.MEDIA_URL}web2/landingpage/logo.svg')
         self.assertEqual(image_url(Lan_PageBanModel().img, 800), '')
+
+    def test_admin_product_image_upload_saves_file(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from PIL import Image
+
+        admin_user = User.objects.create_superuser(username='uploader', password='pass', email='u@example.com')
+        self.client.login(username='uploader', password='pass')
+        product = Product.objects.create(
+            user=admin_user, product_group=group(CatalogGroup.TYPE_PRODUCT, Product.GROUP_TALLY), name='Tally Prime',
+        )
+        def upload(file_name):
+            buffer = BytesIO()
+            Image.new('RGB', (1600, 900), (1, 41, 112)).save(buffer, 'PNG')
+            return self.client.post(reverse('admin:web2_product_change', args=[product.pk]), {
+                'user': admin_user.pk,
+                'product_group': product.product_group_id,
+                'name': 'Tally Prime',
+                'slug': product.slug,
+                'sort_order': 0,
+                'show_in_catalog': 'on',
+                'is_published': 'on',
+                'allow_index': 'on',
+                'img': SimpleUploadedFile(file_name, buffer.getvalue(), content_type='image/png'),
+                '_save': 'Save',
+            })
+
+        response = upload('banner.png')
+
+        self.assertEqual(response.status_code, 302)
+        product.refresh_from_db()
+        self.assertEqual(product.img.name, 'web2/product/banner.png')
+        self.assertTrue(Path(self.media_root, product.img.name).exists())
+
+        # A file name over the 100-character field limit is a form message, not a crash.
+        response = upload(f'{"very_long_image_name_" * 6}.png')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Ensure this filename has at most 100 characters')
+
+    def test_admin_upload_limit_is_10_mb_on_every_image_form(self):
+        from django.contrib import admin as django_admin
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from PIL import Image
+
+        from .models import PortfolioModel
+
+        def png_of_size(size):
+            buffer = BytesIO()
+            Image.new('RGB', (50, 50)).save(buffer, 'PNG')
+            # Trailing bytes after the PNG end marker keep it a valid image.
+            return buffer.getvalue() + b'\0' * (size - buffer.tell())
+
+        request = RequestFactory().get('/admin/')
+        request.user = User.objects.create_superuser(username='limit', password='pass', email='l@example.com')
+        for model, field in ((Product, 'img'), (Blog, 'image'), (Lan_PageBanModel, 'img'), (PortfolioModel, 'img')):
+            form_class = django_admin.site._registry[model].get_form(request)
+            for size, allowed in ((10 * 1024 * 1024 - 1024, True), (10 * 1024 * 1024 + 1024, False)):
+                with self.subTest(model=model.__name__, size=size):
+                    upload = SimpleUploadedFile('photo.png', png_of_size(size), content_type='image/png')
+                    form = form_class(data={}, files={field: upload})
+                    form.is_valid()
+                    errors = ' '.join(form.errors.get(field, []))
+                    self.assertEqual('the limit is 10 MB' not in errors, allowed, errors)
 
     def test_optimize_images_command_creates_all_sizes(self):
         Lan_PageBanModel.objects.create(user=self.user, img=self.name)
